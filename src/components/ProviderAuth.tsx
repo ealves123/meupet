@@ -4,20 +4,27 @@ import { PLACES } from '../lib/geo';
 import { PILOT_TYPES, TYPE_LABEL, fmtPhone, onlyDigits } from '../lib/labels';
 import type { ServiceType } from '../lib/types';
 import { Sup, toast } from './ui';
+import { AuthHero } from './AuthHero';
+import { go } from '../lib/router';
 
 /**
  * Entrada do prestador: login por código no celular ou cadastro do negócio.
  * No protótipo o código aparece na tela. Na fase 2 vira Supabase Auth + membros_prestador.
  */
-export function ProviderAuth({ onDone }: { onDone: (isNew: boolean) => void }) {
-  const [mode, setMode] = useState<'entrar' | 'cadastrar'>('entrar');
+export function ProviderAuth({ onDone, initialMode = 'entrar' }: { onDone: (isNew: boolean) => void; initialMode?: 'entrar' | 'cadastrar' }) {
+  const [mode, setMode] = useState<'entrar' | 'cadastrar'>(initialMode);
   return (
-    <div className="pad">
+    <div className="auth">
+      <AuthHero kind="prestador" title={mode === 'entrar' ? 'Área do prestador' : 'Cadastre seu negócio'}
+        text="Receba pedidos de tutores da região, aceite ou recuse em um toque e sugira serviços extras." />
+      <div className="auth-card">
       <div className="tabs flat" role="tablist">
         <button role="tab" aria-selected={mode === 'entrar'} className={mode === 'entrar' ? 'on' : ''} onClick={() => setMode('entrar')}>Entrar</button>
         <button role="tab" aria-selected={mode === 'cadastrar'} className={mode === 'cadastrar' ? 'on' : ''} onClick={() => setMode('cadastrar')}>Cadastrar meu negócio</button>
       </div>
       {mode === 'entrar' ? <SignIn onDone={() => onDone(false)} onSignup={() => setMode('cadastrar')} /> : <SignUp onDone={() => onDone(true)} />}
+      </div>
+      <p className="auth-switch">É tutor? <button className="link" onClick={() => go('/entrar')}>Entrar como tutor</button></p>
     </div>
   );
 }

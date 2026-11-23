@@ -15,7 +15,7 @@ export function MyBookings() {
   const [reviewId, setReviewId] = useState<string | null>(null);
   const [stars, setStars] = useState(5);
   const [text, setText] = useState('');
-  if (!s.tutor) return <><TopBar title="Agendamentos" /><Empty icon="📅" title="Você ainda não entrou"><p>Seus agendamentos aparecem aqui depois do primeiro.</p><button className="btn" onClick={() => go('/')}>Encontrar um serviço</button></Empty></>;
+  if (!s.tutor) return <><TopBar title="Agendamentos" /><Empty icon="📅" title="Você ainda não entrou"><p>Entre para acompanhar seus pedidos e agendamentos.</p><div className="row gap wrap center"><button className="btn" onClick={() => go('/entrar?volta=/agendamentos')}>Entrar como tutor</button><button className="btn ghost" onClick={() => go('/explorar')}>Encontrar um serviço</button></div></Empty></>;
 
   const mine = s.bookings.filter(b => b.tutorPhone === s.tutor!.phone);
   const now = new Date();
@@ -74,7 +74,7 @@ export function MyBookings() {
       <TopBar title="Agendamentos" />
       <div className="pad">
         <h3 className="section-label">Próximos</h3>
-        {upcoming.length ? upcoming.map(b => <Card key={b.id} b={b} />) : <p className="muted">Nada marcado. <button className="link" onClick={() => go('/')}>Agendar um serviço</button></p>}
+        {upcoming.length ? upcoming.map(b => <Card key={b.id} b={b} />) : <p className="muted">Nada marcado. <button className="link" onClick={() => go('/explorar')}>Agendar um serviço</button></p>}
         {past.length > 0 && <><h3 className="section-label">Histórico</h3>{past.map(b => <Card key={b.id} b={b} />)}</>}
       </div>
 

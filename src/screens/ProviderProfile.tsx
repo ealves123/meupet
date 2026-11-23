@@ -12,7 +12,7 @@ export function ProviderProfile({ slug }: { slug: string }) {
   const s = useStore();
   const p = s.providers.find(x => x.slug === slug);
   if (!p) return (<><TopBar title="Prestador" onBack /><Empty icon="🔍" title="Prestador indisponível">
-    <p>Este perfil não está mais ativo. Veja outros prestadores por perto.</p><button className="btn" onClick={() => go('/')}>Ver no mapa</button></Empty></>);
+    <p>Este perfil não está mais ativo. Veja outros prestadores por perto.</p><button className="btn" onClick={() => go('/explorar')}>Ver no mapa</button></Empty></>);
 
   const pet = s.pets.find(x => x.id === s.selectedPetId && !x.archived) ?? null;
   const size: Size = pet?.size ?? 'medio';

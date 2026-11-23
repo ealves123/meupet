@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useStore, logout, savePet, archivePet, updateTutor, resetDemo } from '../lib/store';
+import { TutorAuthBody } from './TutorAuth';
 import { TopBar, Sheet, Sup, toast } from '../components/ui';
 import { PetForm } from '../components/PetForm';
-import { Login } from '../components/Login';
 import { SIZE_SHORT, SPECIES_LABEL } from '../lib/labels';
 import { go } from '../lib/router';
 import type { Pet } from '../lib/types';
@@ -15,7 +15,7 @@ export function Account() {
     <div>
       <TopBar title="Conta" />
       {!s.tutor ? (
-        <section className="card"><h3>Entrar no meuPet</h3><Login onDone={() => toast('Pronto, você entrou.')} /></section>
+        <TutorAuthBody onDone={() => toast('Pronto, você entrou.')} />
       ) : (
         <>
           <section className="card">
@@ -24,7 +24,7 @@ export function Account() {
             <h4>Onde receber avisos</h4>
             <label className="check"><input type="checkbox" checked={s.tutor.channels.whatsapp} onChange={e => updateTutor({ channels: { ...s.tutor!.channels, whatsapp: e.target.checked } })} /> WhatsApp</label>
             <label className="check"><input type="checkbox" checked={s.tutor.channels.email} onChange={e => updateTutor({ channels: { ...s.tutor!.channels, email: e.target.checked } })} /> E-mail</label>
-            <button className="link" onClick={logout}>Sair</button>
+            <button className="link" onClick={() => { logout(); go('/'); }}>Sair</button>
           </section>
           <section className="card">
             <h3>Meus pets</h3>
@@ -41,15 +41,7 @@ export function Account() {
         </>
       )}
       <section className="card">
-        <h3>Você é prestador?</h3>
-        <p className="muted">Cadastre seu negócio, receba pedidos, aceite ou recuse e sugira serviços extras.</p>
-        <button className="btn" onClick={() => go('/prestador')}>{s.providerSession ? 'Abrir painel do prestador' : 'Entrar ou cadastrar como prestador'}</button>
-      </section>
-      <section className="card">
-        <h3>Sobre este protótipo</h3>
-        <button className="link" onClick={() => go('/sobre')}>O que está simulado e quais suposições seguimos ›</button>
-        <br />
-        <button className="link danger" onClick={() => { if (confirm('Apagar tudo e voltar aos dados de exemplo?')) { resetDemo(); toast('Dados de exemplo restaurados'); } }}>Restaurar dados de exemplo</button>
+        <button className="link" onClick={() => go('/sobre')}>Sobre este protótipo ›</button>
       </section>
       <Sheet open={!!editPet} onClose={() => setEditPet(null)} title={editPet?.id ? 'Editar pet' : 'Novo pet'}>
         {editPet && <PetForm initial={editPet} onSave={p => { savePet(p); setEditPet(null); }} />}
@@ -87,6 +79,9 @@ export function About() {
           <li>Login por código no WhatsApp ou SMS. Pagamento no local.</li>
           <li>Nenhum lembrete entre 22h e 7h.</li>
         </ul>
+        <h3>Para testar</h3>
+        <p className="muted small">Apaga o que você fez neste aparelho e volta aos prestadores e agendas de exemplo.</p>
+        <button className="link danger" onClick={() => { if (confirm('Apagar tudo e voltar aos dados de exemplo?')) { resetDemo(); toast('Dados de exemplo restaurados'); go('/'); } }}>Restaurar dados de exemplo</button>
       </div>
     </div>
   );

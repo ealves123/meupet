@@ -18,6 +18,12 @@ interface Row { p: Provider; km: number; svc: Service; next: Date | null; rating
 
 let memo: { center: LatLng; radius: number; types: ServiceType[]; day: Day; view: 'mapa' | 'lista'; sort: Sort; minStars: number; maxPrice: number | null } | null = null;
 
+/** Abre o Explorar já filtrado por um tipo de serviço (atalhos da home). */
+export function exploreType(t: ServiceType | null) {
+  memo = memo ? { ...memo, types: t ? [t] : [] } : { center: ALPHAVILLE, radius: DEFAULT_RADIUS_KM, types: t ? [t] : [], day: 'any', view: 'mapa', sort: 'dist', minStars: 0, maxPrice: null };
+  go('/explorar');
+}
+
 export function Explore() {
   const s = useStore();
   const [center, setCenter] = useState<LatLng>(memo?.center ?? ALPHAVILLE);

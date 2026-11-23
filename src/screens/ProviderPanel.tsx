@@ -19,21 +19,21 @@ function useProvider() {
 const pendingOf = (s: AppState, providerId: string) =>
   s.bookings.filter(b => b.providerId === providerId && b.status === 'pendente').sort((a, b) => (a.respondBy ?? a.start).localeCompare(b.respondBy ?? b.start));
 
-export function ProviderPanel() {
+export function ProviderPanel({ initialMode = 'entrar' }: { initialMode?: 'entrar' | 'cadastrar' }) {
   const s = useStore();
   const [tab, setTab] = useState<Tab>('pedidos');
   const p = s.providerSession ? s.providers.find(x => x.id === s.providerSession!.providerId) : undefined;
   if (!p) return (
     <div className="provider">
-      <TopBar title="Área do prestador" onBack={() => go('/conta')} />
-      <ProviderAuth onDone={isNew => { setTab(isNew ? 'servicos' : 'pedidos'); toast(isNew ? 'Cadastro criado. Agora cadastre seus serviços.' : 'Pronto, você entrou.'); }} />
+      <TopBar title="Área do prestador" onBack={() => go('/')} />
+      <ProviderAuth initialMode={initialMode} onDone={isNew => { setTab(isNew ? 'servicos' : 'pedidos'); toast(isNew ? 'Cadastro criado. Agora cadastre seus serviços.' : 'Pronto, você entrou.'); }} />
     </div>
   );
   const pending = pendingOf(s, p.id).length;
   const hasServices = p.services.some(x => x.active);
   return (
     <div className="provider">
-      <TopBar title={p.name} onBack={() => go('/conta')} right={<button className="link sm" onClick={() => { logoutProvider(); toast('Você saiu do painel.'); }}>Sair</button>} />
+      <TopBar title={p.name} onBack={() => go('/')} right={<button className="link sm" onClick={() => { logoutProvider(); go('/'); toast('Você saiu do painel.'); }}>Sair</button>} />
       {!hasServices && <div className="notice warn">Você ainda não aparece no mapa: cadastre ao menos um serviço ativo na aba Serviços.</div>}
       <div className="tabs" role="tablist">
         {(['pedidos', 'agenda', 'servicos', 'horarios', 'indicadores'] as Tab[]).map(t => (

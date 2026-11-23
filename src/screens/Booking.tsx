@@ -119,7 +119,7 @@ export function Booking({ slug, serviceId, query }: { slug: string; serviceId: s
         </section>
         <div className="row gap pad">
           <button className="btn ghost" onClick={() => go(`/agendamento/${done.id}`)}>Ver detalhes</button>
-          <button className="btn" onClick={() => go('/')}>Voltar ao mapa</button>
+          <button className="btn" onClick={() => go('/explorar')}>Voltar ao mapa</button>
         </div>
       </div>
     );

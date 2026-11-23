@@ -42,7 +42,7 @@ public/          ícones do PWA (192, 512, apple-touch-icon)
 src/main.tsx     ponto de entrada; registra o service worker só no build PWA de produção
 src/App.tsx      tabela de rotas e barra de navegação inferior
 src/lib/         lógica sem UI: tipos, store, dados de exemplo, cálculo de horários, datas, geo, .ics, rótulos
-src/screens/     telas (Explore, ProviderProfile, Booking, MyBookings, Messages, Account/About, ProviderPanel)
+src/screens/     telas (Home, Explore, TutorAuth, ProviderProfile, Booking, MyBookings, Messages, Account/About, ProviderPanel)
 src/components/  mapa (MapView), login, formulário de pet, aviso de instalação, componentes de UI
 ```
 
@@ -56,7 +56,7 @@ src/components/  mapa (MapView), login, formulário de pet, aviso de instalaçã
 - **Propostas de extra:** `proposeExtra()` sugere outro serviço do prestador para depois do atendimento, no mesmo profissional; `fitsExtension()` em `slots.ts` confere se cabe. Se o tutor aceita (`answerProposal()`), o serviço entra em `booking.extras` e `end` cresce. Use `bookingTotal()` para valores.
 - **Prestador:** login e cadastro por código simulado (`ProviderAuth.tsx`); `providerSession` diz quem está no painel. O seed cria uma conta por prestador fictício com o telefone dele (ex.: (11) 4191-0001). Prestador novo começa sem serviços e só aparece no mapa depois de ter um ativo.
 - **Mensagens simuladas:** WhatsApp/e-mail (código de login, confirmação, lembretes de 24 h e 2 h, pedido de avaliação, cancelamentos) entram em `state.messages` com `sendAt` futuro; a aba Mensagens mostra as que já "chegaram" (`sendAt <= agora`). `quiet()` joga envios entre 22h e 7h para 21h. Remarcar ou cancelar apaga os lembretes pendentes do agendamento.
-- **Rotas — [src/lib/router.ts](src/lib/router.ts):** roteador por hash (`#/caminho?query`) com `useRoute()`, `go()` e `back()`. Rotas em [src/App.tsx](src/App.tsx): `/`, `/p/:slug`, `/agendar/:slug/:serviceId?remarcar=<id>`, `/agendamentos`, `/agendamento/:id` (detalhes), `/mensagens`, `/conta`, `/sobre`, `/prestador`. A barra inferior some no agendamento e no painel do prestador.
+- **Rotas — [src/lib/router.ts](src/lib/router.ts):** roteador por hash (`#/caminho?query`) com `useRoute()`, `go()` e `back()`. Rotas em [src/App.tsx](src/App.tsx): `/` (home com as jornadas de tutor e prestador), `/explorar` (mapa e lista), `/entrar?volta=` (login do tutor), `/p/:slug`, `/agendar/:slug/:serviceId?remarcar=<id>`, `/agendamentos`, `/agendamento/:id` (detalhes), `/mensagens`, `/conta`, `/sobre` (inclui "Restaurar dados de exemplo"), `/prestador?cadastro=1` (login/cadastro do prestador e painel). A barra inferior some no agendamento e no painel do prestador.
 - **Mapa:** [src/components/MapView.tsx](src/components/MapView.tsx) com Leaflet; a busca de endereço usa uma lista fixa de lugares em [src/lib/geo.ts](src/lib/geo.ts).
 - **Modos de build:** [vite.config.ts](vite.config.ts) troca entre `viteSingleFile` (`--mode single`) e `VitePWA` (padrão).
 
