@@ -66,6 +66,15 @@ src/components/  mapa (MapView), login, formulário de pet, aviso de instalaçã
 - Decisões ainda não confirmadas pela especificação são marcadas `[Suposição]` no código e aparecem na interface com a etiqueta `<Sup>` de [src/components/ui.tsx](src/components/ui.tsx). A lista atual (pedido pendente com prazo de resposta de 4 h, raio de 3 km, reserva de 5 min, antecedência de 2 h, cancelamento grátis até 2 h, até 2 remarcações e 3 agendamentos futuros por prestador, comissão de 8% só sobre cliente novo vindo do meuPet etc.) está no [README.md](README.md).
 - Datas ficam como strings ISO no estado; use os helpers de [src/lib/dates.ts](src/lib/dates.ts). Formatação de moeda e rótulos fica em [src/lib/labels.ts](src/lib/labels.ts).
 
+## Supabase (em andamento)
+
+Projeto: `https://uqzxmyqafanfsiroigry.supabase.co`. O app ainda roda em cima do `store.ts` local; [src/lib/supabase.ts](src/lib/supabase.ts) cria o cliente só quando `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` existem (veja `.env.example`; local em `.env.local`, produção nas variáveis da Vercel).
+
+- [supabase/migrations/](supabase/migrations/): `…01_esquema.sql` (tabelas, RLS e funções), `…02_geo.sql` (PostGIS, `prestadores_proximos`), `…03_cron.sql` (pg_cron chama `expirar_pedidos()` a cada minuto). Nomes de tabelas e colunas em português.
+- Escrita em agendamentos, propostas, reservas, avaliações e mensagens só pelas funções (`pedir_agendamento`, `aceitar_agendamento`, `recusar_agendamento`, `sugerir_extra`, `responder_proposta`, `cancelar_pelo_tutor` etc.), que espelham as ações do `store.ts`. Erros de regra saem como exceção com mensagem curta (`ocupado`, `limite`, `nao_cabe`, `motivo_obrigatorio`...). A restrição `sem_sobreposicao` garante que não há dois agendamentos sobrepostos no mesmo profissional.
+- O telefone do prestador não é legível pela API: sai por `contato_prestador()`, só depois de confirmado. A grade de horários livres continua calculada no app, a partir de `ocupacao()`.
+- [supabase/seed.sql](supabase/seed.sql) é gerado a partir de `SEED_PROVIDERS` em `src/lib/seed.ts` (UUIDs determinísticos); se mudar os prestadores de exemplo, gere de novo em vez de editar à mão.
+
 ## Fase 2 (planejada, segundo o README)
 
-Trocar `store.ts` por Supabase (Postgres + PostGIS + login por telefone), com a confirmação como função no banco e restrição `EXCLUDE USING gist` por profissional e intervalo; mensagens reais pela API do WhatsApp Business; domínio próprio. Mantenha as ações do store com formato que se traduza 1:1 nessas chamadas futuras.
+Trocar `store.ts` pelas funções do Supabase (login por e-mail no piloto); mensagens reais por e-mail e depois pela API do WhatsApp Business; domínio próprio. Mantenha as ações do store com formato que se traduza 1:1 nas funções do banco.
