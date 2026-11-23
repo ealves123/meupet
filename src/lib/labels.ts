@@ -34,6 +34,8 @@ export const SIZES: Size[] = ['mini', 'pequeno', 'medio', 'grande', 'gigante'];
 export const SPECIES_LABEL: Record<Species, string> = { cao: 'Cão', gato: 'Gato', outro: 'Outro' };
 
 export const STATUS_LABEL: Record<BookingStatus, string> = {
+  pendente: 'Aguardando o prestador',
+  recusado: 'Recusado pelo prestador',
   confirmado: 'Confirmado',
   concluido: 'Concluído',
   no_show: 'Falta',
@@ -43,3 +45,12 @@ export const STATUS_LABEL: Record<BookingStatus, string> = {
 
 export const brl = (v: number | null | undefined) =>
   v == null ? 'Valor no local' : v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
+
+export const onlyDigits = (v: string) => v.replace(/\D/g, '');
+export function fmtPhone(v: string) {
+  const d = onlyDigits(v).slice(0, 11);
+  if (d.length <= 2) return d;
+  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+}

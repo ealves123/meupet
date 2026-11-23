@@ -1,9 +1,11 @@
 import { useRoute, go } from './lib/router';
-import { useStore } from './lib/store';
+import { useEffect } from 'react';
+import { useStore, sweep } from './lib/store';
 import { Explore } from './screens/Explore';
 import { ProviderProfile } from './screens/ProviderProfile';
 import { Booking } from './screens/Booking';
 import { MyBookings } from './screens/MyBookings';
+import { BookingDetail } from './screens/BookingDetail';
 import { Messages } from './screens/Messages';
 import { Account, About } from './screens/Account';
 import { ProviderPanel } from './screens/ProviderPanel';
@@ -11,8 +13,10 @@ import { ProviderPanel } from './screens/ProviderPanel';
 export function App() {
   const { parts, query } = useRoute();
   const s = useStore();
+  // pedidos sem resposta no prazo são recusados sozinhos
+  useEffect(() => { const t = setInterval(sweep, 30_000); return () => clearInterval(t); }, []);
   const unread = s.messages.filter(m => m.to === 'tutor' && new Date(m.sendAt).getTime() <= Date.now()).length;
-  const upcoming = s.tutor ? s.bookings.filter(b => b.tutorPhone === s.tutor!.phone && b.status === 'confirmado' && new Date(b.end) > new Date()).length : 0;
+  const upcoming = s.tutor ? s.bookings.filter(b => b.tutorPhone === s.tutor!.phone && (b.status === 'confirmado' || b.status === 'pendente') && new Date(b.end) > new Date()).length : 0;
   const [a, b, c] = parts;
   let screen;
   let nav = true;
@@ -20,12 +24,13 @@ export function App() {
   else if (a === 'p' && b) screen = <ProviderProfile slug={b} />;
   else if (a === 'agendar' && b && c) { screen = <Booking key={`${b}/${c}/${query.get('remarcar') ?? ''}`} slug={b} serviceId={c} query={query} />; nav = false; }
   else if (a === 'agendamentos') screen = <MyBookings />;
+  else if (a === 'agendamento' && b) screen = <BookingDetail key={b} id={b} />;
   else if (a === 'mensagens') screen = <Messages />;
   else if (a === 'conta') screen = <Account />;
   else if (a === 'sobre') screen = <About />;
   else if (a === 'prestador') { screen = <ProviderPanel />; nav = false; }
   else screen = <Explore />;
-  const tab = !a || a === 'p' ? 'explorar' : a;
+  const tab = !a || a === 'p' ? 'explorar' : a === 'agendamento' ? 'agendamentos' : a;
   return (
     <div className={`app${nav ? ' with-nav' : ''}`}>
       <main>{screen}</main>

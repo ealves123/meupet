@@ -1,4 +1,4 @@
-import type { AppState, Provider, Service, ServiceType, Size, Booking, Review, WeekHours, Block } from './types';
+import type { AppState, Provider, Service, ServiceType, Size, Booking, Review, WeekHours, Block, ProviderAccount } from './types';
 import { addDays, atMinutes, addMin, startOfDay } from './dates';
 import { daySlots } from './slots';
 
@@ -61,8 +61,11 @@ export function buildSeed(now = new Date()): AppState {
   const r = rng(42);
   const providers: Provider[] = JSON.parse(JSON.stringify(SEED_PROVIDERS));
   const state: AppState = {
-    version: 1, seededAt: now.toISOString(), providers, bookings: [], blocks: [], holds: [], reviews: [], messages: [],
-    tutor: null, pets: [], selectedPetId: null, actingProviderId: 'p1',
+    version: 2, seededAt: now.toISOString(), providers, bookings: [], blocks: [], holds: [], reviews: [], messages: [], proposals: [],
+    tutor: null, pets: [], selectedPetId: null,
+    // uma conta de acesso por prestador fictício: entra com o telefone dele
+    providerAccounts: providers.map((p): ProviderAccount => ({ phone: p.phone.replace(/\D/g, ''), name: `Responsável ${p.name}`, email: `contato@${p.slug}.exemplo`, providerId: p.id, createdAt: now.toISOString() })),
+    providerSession: null,
   };
   const today = startOfDay(now);
   let bid = 0;
@@ -82,11 +85,16 @@ export function buildSeed(now = new Date()): AppState {
           if (!daySlots(state, p, sv2, size, day, staff, new Date(0)).some(x => x.start.getTime() === s.start.getTime())) continue;
           const [client, pet] = CLIENTS[Math.floor(r() * CLIENTS.length)];
           const past = s.start < now;
+          const origin = r() < 0.3 ? 'marketplace' as const : 'agenda_prestador' as const;
+          // alguns pedidos do meuPet dos próximos dias ainda esperando resposta do prestador
+          const hoursAhead = (s.start.getTime() - now.getTime()) / 3600_000;
+          const pending = origin === 'marketplace' && hoursAhead > 5 && hoursAhead < 96 && r() < 0.5;
           const b: Booking = {
             id: `b${++bid}`, providerId: p.id, serviceId: sv2.id, staff, start: s.start.toISOString(), end: addMin(s.start, dur).toISOString(),
-            status: past ? (r() < 0.08 ? 'no_show' : 'concluido') : 'confirmado', origin: r() < 0.3 ? 'marketplace' : 'agenda_prestador',
+            status: past ? (r() < 0.08 ? 'no_show' : 'concluido') : pending ? 'pendente' : 'confirmado', origin,
+            respondBy: pending ? addMin(now, 60 + Math.floor(r() * 180)).toISOString() : undefined,
             clientName: client, petName: pet, size, price: sv2.price[size], isNewClient: r() < 0.25, reschedules: 0,
-            presenceConfirmed: !past && r() < 0.5, createdAt: addDays(s.start, -3).toISOString(),
+            presenceConfirmed: !past && !pending && r() < 0.5, createdAt: addDays(s.start, -3).toISOString(),
           };
           state.bookings.push(b);
         }

@@ -1,10 +1,10 @@
-import type { AppState, Provider, Service, Size } from './types';
+import type { AppState, Booking, Provider, Service, Size } from './types';
 import { atMinutes, addMin, addDays, startOfDay } from './dates';
 
 export interface Slot { start: Date; staff: string }
 
 /** Status que ocupam a agenda. */
-const ACTIVE = new Set(['confirmado', 'concluido', 'no_show']);
+export const ACTIVE = new Set(['pendente', 'confirmado', 'concluido', 'no_show']);
 
 /**
  * Horários reais de um dia (RN-13, RN-14, RN-16):
@@ -71,4 +71,31 @@ export const sizeForSvc = (svc: Service, size: Size) => svc.duration[size];
 export function mainService(p: Provider, types: string[], species?: string) {
   const act = p.services.filter(x => x.active && (!species || x.species.includes(species as never)));
   return act.find(x => types.length === 0 || types.includes(x.type)) ?? null;
+}
+
+/**
+ * O agendamento pode crescer `extraMin` minutos no fim (serviço extra)?
+ * Confere fechamento do dia, outros agendamentos, bloqueios e reservas do mesmo profissional.
+ */
+export function fitsExtension(s: AppState, p: Provider, b: Booking, extraMin: number): boolean {
+  const start = new Date(b.start), end = new Date(b.end);
+  const hours = p.hours[start.getDay()];
+  const newEnd = end.getTime() + extraMin * 60_000;
+  if (!hours || newEnd > atMinutes(startOfDay(start), hours[1]).getTime()) return false;
+  const a = end.getTime(), e = newEnd + p.cleanupMin * 60_000;
+  const hit = (x: number, y: number) => a < y && e > x;
+  for (const o of s.bookings) {
+    if (o.id === b.id || o.providerId !== p.id || o.staff !== b.staff || !ACTIVE.has(o.status)) continue;
+    if (hit(new Date(o.start).getTime(), new Date(o.end).getTime() + p.cleanupMin * 60_000)) return false;
+  }
+  for (const k of s.blocks) if (k.providerId === p.id && (k.staff == null || k.staff === b.staff) && hit(new Date(k.start).getTime(), new Date(k.end).getTime())) return false;
+  for (const h of s.holds) if (h.providerId === p.id && h.staff === b.staff && new Date(h.expiresAt).getTime() > Date.now() && hit(new Date(h.start).getTime(), new Date(h.end).getTime())) return false;
+  return true;
+}
+
+/** Os n horários livres mais próximos a partir de `from` (RN-30). */
+export function nearestFree(s: AppState, p: Provider, svc: Service, size: Size, from: Date, n = 3, now = new Date()): Date[] {
+  const out: Date[] = [];
+  for (let d = 0; d < 14 && out.length < n; d++) out.push(...daySlots(s, p, svc, size, addDays(startOfDay(from), d), 'any', now).map(x => x.start).slice(0, n - out.length));
+  return out;
 }

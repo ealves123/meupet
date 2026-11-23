@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useStore, confirmPresence } from '../lib/store';
+import { useStore, confirmPresence, answerProposal } from '../lib/store';
 import { TopBar, Empty, toast } from '../components/ui';
 import { whenLabel } from '../lib/dates';
 import { go } from '../lib/router';
@@ -12,13 +12,23 @@ export function Messages() {
   const mine = s.messages.filter(m => m.to === 'tutor');
   const sent = mine.filter(m => new Date(m.sendAt).getTime() <= now).sort((a, b) => b.sendAt.localeCompare(a.sendAt));
   const future = mine.filter(m => new Date(m.sendAt).getTime() > now).sort((a, b) => a.sendAt.localeCompare(b.sendAt));
-  const act = (a: string, bookingId?: string) => {
+  const act = (a: string, bookingId?: string, proposalId?: string) => {
     const b = s.bookings.find(x => x.id === bookingId);
+    if ((a === 'aceitar_extra' || a === 'recusar_extra') && proposalId) {
+      const r = answerProposal(proposalId, a === 'aceitar_extra');
+      toast(r.ok ? (a === 'aceitar_extra' ? 'Extra adicionado. O prestador foi avisado.' : 'Tudo bem, avisamos o prestador.') : 'Essa sugestão não está mais disponível.');
+      return;
+    }
     if (a === 'confirmar' && b) { confirmPresence(b.id); toast('Presença confirmada. O prestador já sabe.'); return; }
     if (a === 'remarcar' && b) { const p = s.providers.find(x => x.id === b.providerId)!; go(b.status === 'confirmado' ? `/agendar/${p.slug}/${b.serviceId}?remarcar=${b.id}` : `/agendar/${p.slug}/${b.serviceId}`); return; }
-    go('/agendamentos');
+    go(bookingId && b ? `/agendamento/${bookingId}` : '/agendamentos');
   };
-  const LABEL: Record<string, string> = { confirmar: 'Confirmo presença', remarcar: 'Remarcar', cancelar: 'Cancelar', avaliar: 'Avaliar', ver: 'Ver detalhes' };
+  // botões de proposta só enquanto ela está pendente; "cancelar" de um pedido só enquanto ele está ativo
+  const visible = (a: string, m: (typeof mine)[number]) => {
+    if (a === 'aceitar_extra' || a === 'recusar_extra') return s.proposals.find(x => x.id === m.proposalId)?.status === 'pendente';
+    return true;
+  };
+  const LABEL: Record<string, string> = { aceitar_extra: 'Quero o extra', recusar_extra: 'Agora não', confirmar: 'Confirmo presença', remarcar: 'Remarcar', cancelar: 'Cancelar', avaliar: 'Avaliar', ver: 'Ver detalhes' };
   return (
     <div>
       <TopBar title="Mensagens" />
@@ -30,7 +40,7 @@ export function Messages() {
             <header><span>{m.channel === 'whatsapp' ? '🟢 WhatsApp' : '✉️ E-mail'}</span><small className="muted">{whenLabel(new Date(m.sendAt))}</small></header>
             <b>{m.title}</b>
             <p>{m.body}</p>
-            {m.actions && <div className="row gap wrap">{m.actions.map(a => <button key={a} className="btn sm ghost" onClick={() => act(a, m.bookingId)}>{LABEL[a]}</button>)}</div>}
+            {m.actions && <div className="row gap wrap">{m.actions.filter(a => visible(a, m)).map(a => <button key={a} className="btn sm ghost" onClick={() => act(a, m.bookingId, m.proposalId)}>{LABEL[a]}</button>)}</div>}
           </article>
         ))}
         {future.length > 0 && (

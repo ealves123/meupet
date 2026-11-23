@@ -42,7 +42,42 @@ export interface Provider {
   emoji: string;
 }
 
-export type BookingStatus = 'confirmado' | 'concluido' | 'no_show' | 'cancelado_tutor' | 'cancelado_prestador';
+/** O agendamento nasce "pendente" e o prestador aceita (confirmado) ou recusa (recusado). */
+export type BookingStatus = 'pendente' | 'confirmado' | 'recusado' | 'concluido' | 'no_show' | 'cancelado_tutor' | 'cancelado_prestador';
+
+/** Serviço extra que o tutor aceitou junto com o principal (ex.: hidratação com o banho). */
+export interface Extra {
+  proposalId: string;
+  serviceId: string;
+  name: string;
+  price: number | null;
+  duration: number;
+}
+
+/** Proposta de serviço extra feita pelo prestador para um agendamento. */
+export interface Proposal {
+  id: string;
+  bookingId: string;
+  providerId: string;
+  serviceId: string;
+  name: string;
+  price: number | null;
+  duration: number;
+  note: string;
+  status: 'pendente' | 'aceita' | 'recusada' | 'expirada';
+  createdAt: string;
+  respondedAt?: string;
+}
+
+/** Conta de acesso ao painel. Na fase 2 vira membros_prestador + auth.users. */
+export interface ProviderAccount {
+  /** só dígitos, com DDD */
+  phone: string;
+  name: string;
+  email: string;
+  providerId: string;
+  createdAt: string;
+}
 
 export interface Booking {
   id: string;
@@ -66,6 +101,11 @@ export interface Booking {
   reschedules: number;
   lateCancel?: boolean;
   cancelReason?: string;
+  /** motivo da recusa pelo prestador (obrigatório) */
+  refuseReason?: string;
+  /** prazo para o prestador responder um pedido pendente */
+  respondBy?: string;
+  extras?: Extra[];
   presenceConfirmed?: boolean;
   reviewed?: boolean;
   createdAt: string;
@@ -124,8 +164,10 @@ export interface Message {
   sendAt: string;
   title: string;
   body: string;
-  actions?: ('confirmar' | 'remarcar' | 'cancelar' | 'avaliar' | 'ver')[];
-  kind: 'codigo' | 'confirmacao' | 'lembrete24' | 'lembrete2' | 'avaliacao' | 'cancel_prestador' | 'cancel_tutor' | 'remarcacao';
+  actions?: ('confirmar' | 'remarcar' | 'cancelar' | 'avaliar' | 'ver' | 'aceitar_extra' | 'recusar_extra')[];
+  kind: 'codigo' | 'confirmacao' | 'lembrete24' | 'lembrete2' | 'avaliacao' | 'cancel_prestador' | 'cancel_tutor' | 'remarcacao'
+    | 'pedido' | 'recusa' | 'proposta' | 'proposta_resposta';
+  proposalId?: string;
   /** mensagens para o prestador ficam fora da caixa do tutor */
   to: 'tutor' | 'prestador';
   providerId?: string;
@@ -140,8 +182,11 @@ export interface AppState {
   holds: Hold[];
   reviews: Review[];
   messages: Message[];
+  proposals: Proposal[];
   tutor: Tutor | null;
   pets: Pet[];
   selectedPetId: string | null;
-  actingProviderId: string;
+  providerAccounts: ProviderAccount[];
+  /** prestador logado no painel (mesmo aparelho do tutor no protótipo) */
+  providerSession: { providerId: string; phone: string } | null;
 }

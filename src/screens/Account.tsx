@@ -42,8 +42,8 @@ export function Account() {
       )}
       <section className="card">
         <h3>Você é prestador?</h3>
-        <p className="muted">Veja a agenda digital, os serviços e os indicadores do lado do prestador.</p>
-        <button className="btn" onClick={() => go('/prestador')}>Abrir painel do prestador</button>
+        <p className="muted">Cadastre seu negócio, receba pedidos, aceite ou recuse e sugira serviços extras.</p>
+        <button className="btn" onClick={() => go('/prestador')}>{s.providerSession ? 'Abrir painel do prestador' : 'Entrar ou cadastrar como prestador'}</button>
       </section>
       <section className="card">
         <h3>Sobre este protótipo</h3>
@@ -68,14 +68,16 @@ export function About() {
         <p>O fluxo inteiro funciona: busca no mapa, filtros, perfil, horários calculados a partir do funcionamento, dos agendamentos, dos bloqueios e da duração do serviço, reserva temporária, confirmação, remarcação, cancelamento, avaliação e o painel do prestador.</p>
         <h3>O que está simulado</h3>
         <ul>
-          <li>Os 12 prestadores e a agenda deles são fictícios.</li>
+          <li>Os 12 prestadores e a agenda deles são fictícios. Para entrar como um deles, use o telefone dele, por exemplo (11) 4191-0001.</li>
           <li>Os dados ficam só neste aparelho. Tutor e prestador estão no mesmo celular para dar para testar os dois lados.</li>
           <li>O código de login e os lembretes de WhatsApp e e-mail aparecem na aba Mensagens em vez de serem enviados.</li>
           <li>A busca de endereço conhece só alguns lugares de Alphaville e arredores.</li>
         </ul>
         <h3>Suposições da especificação v0.1 <Sup /></h3>
         <ul>
-          <li>Confirmação na hora, sem aprovação do prestador.</li>
+          <li>O pedido nasce pendente e segura o horário. O prestador aceita ou recusa com motivo em até 4 h (ou até 1 h antes do horário); sem resposta, o pedido é recusado sozinho. Remarcar um agendamento já aceito não precisa de nova aprovação.</li>
+          <li>O prestador pode sugerir um serviço extra (ex.: hidratação com o banho). Ele é feito logo depois, com o mesmo profissional, e só entra se o tutor aceitar e ainda couber na agenda.</li>
+          <li>Cadastro de prestador sem aprovação manual: aparece no mapa ao ter um serviço ativo.</li>
           <li>Hotel e creche aparecem como "em breve". Atendimento a domicílio e leva e traz ficam para depois.</li>
           <li>Telefone e WhatsApp do prestador só aparecem depois de agendar.</li>
           <li>Cada agendamento guarda a origem e se é cliente novo, que é a base da comissão de 8%. A cobrança da comissão não está no MVP.</li>

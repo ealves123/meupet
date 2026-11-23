@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useStore, getState, createHold, releaseHold, confirmBooking, savePet, selectPet, HOLD_MIN, priceLabel } from '../lib/store';
+import { useStore, getState, createHold, releaseHold, confirmBooking, savePet, selectPet, HOLD_MIN, RESPOND_H, priceLabel } from '../lib/store';
 import { TopBar, Sup, Empty, toast } from '../components/ui';
 import { daySlots, type Slot } from '../lib/slots';
 import { addDays, addMin, startOfDay, sameDay, wd, hhmm, durLabel, whenLabel, dayMonth } from '../lib/dates';
@@ -102,21 +102,23 @@ export function Booking({ slug, serviceId, query }: { slug: string; serviceId: s
         <TopBar title={rescheduleOf ? 'Remarcado' : 'Agendado'} />
         <div className="success">
           <div className="success-icon">✓</div>
-          <h2>{rescheduleOf ? 'Horário alterado!' : 'Agendamento confirmado!'}</h2>
+          <h2>{done.status === 'pendente' ? (rescheduleOf ? 'Novo horário pedido!' : 'Pedido enviado!') : 'Horário alterado!'}</h2>
           <p>{svc.name} do <b>{pet?.name}</b> no <b>{p.name}</b><br />{whenLabel(st)} · {durLabel(svc.duration[size])} · com {done.staff}</p>
-          <p className="muted small">Confirmado na hora, sem esperar o prestador. <Sup>confirmação imediata</Sup></p>
+          {done.status === 'pendente'
+            ? <p className="muted small">O horário fica reservado para você. {p.name} responde até <b>{whenLabel(new Date(done.respondBy!))}</b> e você recebe a resposta pelo WhatsApp. <Sup>aprovação do prestador</Sup></p>
+            : <p className="muted small">Novo horário confirmado. O prestador já foi avisado.</p>}
         </div>
         <section className="card">
           <p><b>{p.address}</b><br /><span className="muted">{p.area}</span></p>
-          <p>📞 Contato do prestador: <b>{p.phone}</b></p>
-          <p className="muted small">Você recebeu a confirmação pelo WhatsApp e por e-mail (veja em Mensagens). Pagamento no local: {p.payments.join(', ')}.</p>
+          {done.status === 'confirmado' && <p>📞 Contato do prestador: <b>{p.phone}</b></p>}
+          <p className="muted small">{done.status === 'pendente' ? 'O contato do prestador aparece quando ele aceitar.' : 'Você recebeu a confirmação pelo WhatsApp e por e-mail (veja em Mensagens).'} Pagamento no local: {p.payments.join(', ')}.</p>
           <div className="row gap wrap">
             <a className="btn ghost sm" href={`https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}`} target="_blank" rel="noreferrer">Ver rota</a>
-            <button className="btn ghost sm" onClick={() => downloadIcs(done, p, svc)}>Adicionar à agenda</button>
+            {done.status === 'confirmado' && <button className="btn ghost sm" onClick={() => downloadIcs(done, p, svc)}>Adicionar à agenda</button>}
           </div>
         </section>
         <div className="row gap pad">
-          <button className="btn ghost" onClick={() => go('/agendamentos')}>Meus agendamentos</button>
+          <button className="btn ghost" onClick={() => go(`/agendamento/${done.id}`)}>Ver detalhes</button>
           <button className="btn" onClick={() => go('/')}>Voltar ao mapa</button>
         </div>
       </div>
@@ -144,7 +146,7 @@ export function Booking({ slug, serviceId, query }: { slug: string; serviceId: s
               <div className="slot-row">{alts.map(a => <button key={a.getTime()} className="slot" onClick={() => { setDay(startOfDay(a)); setAlts(null); }}>{whenLabel(a)}</button>)}</div>
             </div>
           )}
-          {original && <div className="notice">Remarcando {whenLabel(new Date(original.start))}. O horário atual só é liberado quando você confirmar o novo.</div>}
+          {original && <div className="notice">Remarcando {whenLabel(new Date(original.start))}. O horário atual só é liberado quando você confirmar o novo.{original.status === 'pendente' ? ' O pedido continua esperando a resposta do prestador, agora para o novo horário.' : ''}</div>}
           {pets.length > 1 && (
             <div className="petbar pad-x">
               <span className="muted">Pet:</span>
@@ -211,11 +213,12 @@ export function Booking({ slug, serviceId, query }: { slug: string; serviceId: s
             <dt>Quando</dt><dd><b>{whenLabel(slot.start)}</b></dd>
             <dt>Preço estimado</dt><dd>{priceLabel(svc.price[pet.size], svc.priceFrom)} <span className="muted">· pago no local</span></dd>
             <dt>Cancelamento</dt><dd>Sem custo até {p.cancelWindowH} h antes <Sup>RN-26</Sup></dd>
+            {!rescheduleOf && <><dt>Confirmação</dt><dd>{p.name} aceita ou recusa em até {RESPOND_H} h <Sup>aprovação do prestador</Sup></dd></>}
           </dl>
           <label className="form"><span>Observações para o prestador <span className="muted">(opcional)</span></span>
             <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={2} placeholder="Ex.: tem medo de secador" />
           </label>
-          <div className="bottom-cta"><button className="btn block" onClick={onConfirm}>{rescheduleOf ? 'Confirmar novo horário' : 'Confirmar agendamento'}</button></div>
+          <div className="bottom-cta"><button className="btn block" onClick={onConfirm}>{rescheduleOf ? 'Confirmar novo horário' : 'Enviar pedido'}</button></div>
         </div>
       )}
     </div>
