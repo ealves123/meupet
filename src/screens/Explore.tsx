@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useStore, selectPet } from '../lib/store';
+import { useStore, selectPet, myPets } from '../lib/store';
 import { ALPHAVILLE, DEFAULT_RADIUS_KM, PLACES, distanceKm, kmLabel, PILOT_AREA_CENTER, PILOT_AREA_RADIUS_KM, type LatLng } from '../lib/geo';
 import { PILOT_TYPES, SOON_TYPES, TYPE_EMOJI, TYPE_LABEL, brl } from '../lib/labels';
 import { daySlots, nextSlots } from '../lib/slots';
@@ -41,7 +41,7 @@ export function Explore() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   memo = { center, radius, types, day, view, sort, minStars, maxPrice };
 
-  const pets = s.pets.filter(p => !p.archived);
+  const pets = myPets(s);
   const pet = pets.find(p => p.id === s.selectedPetId) ?? null;
   const size: Size = pet?.size ?? 'medio';
   const now = new Date();

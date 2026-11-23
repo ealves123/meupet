@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useStore, logout, savePet, archivePet, updateTutor, resetDemo } from '../lib/store';
+import { useStore, myPets, logout, savePet, archivePet, updateTutor, resetDemo } from '../lib/store';
 import { TutorAuthBody } from './TutorAuth';
 import { TopBar, Sheet, Sup, toast } from '../components/ui';
 import { PetForm } from '../components/PetForm';
@@ -10,10 +10,10 @@ import type { Pet } from '../lib/types';
 export function Account() {
   const s = useStore();
   const [editPet, setEditPet] = useState<Partial<Pet> | null>(null);
-  const pets = s.pets.filter(p => !p.archived);
+  const pets = myPets(s);
   return (
     <div>
-      <TopBar title="Conta" />
+      <TopBar title="Conta" right={s.tutor && <button className="btn sm ghost danger" onClick={() => { logout(); go('/'); toast('Você saiu da conta.'); }}>Sair</button>} />
       {!s.tutor ? (
         <TutorAuthBody onDone={() => toast('Pronto, você entrou.')} />
       ) : (
@@ -24,7 +24,7 @@ export function Account() {
             <h4>Onde receber avisos</h4>
             <label className="check"><input type="checkbox" checked={s.tutor.channels.whatsapp} onChange={e => updateTutor({ channels: { ...s.tutor!.channels, whatsapp: e.target.checked } })} /> WhatsApp</label>
             <label className="check"><input type="checkbox" checked={s.tutor.channels.email} onChange={e => updateTutor({ channels: { ...s.tutor!.channels, email: e.target.checked } })} /> E-mail</label>
-            <button className="link" onClick={() => { logout(); go('/'); }}>Sair</button>
+            <button className="btn ghost danger block logout" onClick={() => { logout(); go('/'); toast('Você saiu da conta.'); }}>Sair da conta de tutor</button>
           </section>
           <section className="card">
             <h3>Meus pets</h3>
@@ -40,8 +40,9 @@ export function Account() {
           </section>
         </>
       )}
-      <section className="card">
-        <button className="link" onClick={() => go('/sobre')}>Sobre este protótipo ›</button>
+      <section className="card menu">
+        <button onClick={() => go('/prestador')}><span>🏪</span><span>{s.providerSession ? 'Abrir meu painel de prestador' : 'Área do prestador'}<small>Entrar ou cadastrar seu negócio pet</small></span><b>›</b></button>
+        <button onClick={() => go('/sobre')}><span>ℹ️</span><span>Sobre este protótipo<small>O que está simulado e como testar</small></span><b>›</b></button>
       </section>
       <Sheet open={!!editPet} onClose={() => setEditPet(null)} title={editPet?.id ? 'Editar pet' : 'Novo pet'}>
         {editPet && <PetForm initial={editPet} onSave={p => { savePet(p); setEditPet(null); }} />}

@@ -1,6 +1,6 @@
 import { useRoute, go } from './lib/router';
 import { useEffect } from 'react';
-import { useStore, sweep } from './lib/store';
+import { useStore, sweep, tutorInbox } from './lib/store';
 import { Explore } from './screens/Explore';
 import { ProviderProfile } from './screens/ProviderProfile';
 import { Booking } from './screens/Booking';
@@ -17,7 +17,7 @@ export function App() {
   const s = useStore();
   // pedidos sem resposta no prazo são recusados sozinhos
   useEffect(() => { const t = setInterval(sweep, 30_000); return () => clearInterval(t); }, []);
-  const unread = s.messages.filter(m => m.to === 'tutor' && new Date(m.sendAt).getTime() <= Date.now()).length;
+  const unread = tutorInbox(s).filter(m => new Date(m.sendAt).getTime() <= Date.now()).length;
   const upcoming = s.tutor ? s.bookings.filter(b => b.tutorPhone === s.tutor!.phone && (b.status === 'confirmado' || b.status === 'pendente') && new Date(b.end) > new Date()).length : 0;
   const [a, b, c] = parts;
   let screen;

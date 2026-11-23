@@ -1,4 +1,4 @@
-import { useStore, priceLabel } from '../lib/store';
+import { useStore, myPets, priceLabel } from '../lib/store';
 import { TopBar, Stars, Sup, Empty, toast } from '../components/ui';
 import { TYPE_LABEL, SIZE_SHORT } from '../lib/labels';
 import { ratingOf } from '../lib/rating';
@@ -14,7 +14,7 @@ export function ProviderProfile({ slug }: { slug: string }) {
   if (!p) return (<><TopBar title="Prestador" onBack /><Empty icon="🔍" title="Prestador indisponível">
     <p>Este perfil não está mais ativo. Veja outros prestadores por perto.</p><button className="btn" onClick={() => go('/explorar')}>Ver no mapa</button></Empty></>);
 
-  const pet = s.pets.find(x => x.id === s.selectedPetId && !x.archived) ?? null;
+  const pet = myPets(s).find(x => x.id === s.selectedPetId) ?? null;
   const size: Size = pet?.size ?? 'medio';
   const rating = ratingOf(s, p.id);
   const services = p.services.filter(x => x.active && (!pet || x.species.includes(pet.species)));

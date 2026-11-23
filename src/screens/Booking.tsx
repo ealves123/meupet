@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useStore, getState, createHold, releaseHold, confirmBooking, savePet, selectPet, HOLD_MIN, RESPOND_H, priceLabel } from '../lib/store';
+import { useStore, getState, myPets, createHold, releaseHold, confirmBooking, savePet, selectPet, HOLD_MIN, RESPOND_H, priceLabel } from '../lib/store';
 import { TopBar, Sup, Empty, toast } from '../components/ui';
 import { daySlots, type Slot } from '../lib/slots';
 import { addDays, addMin, startOfDay, sameDay, wd, hhmm, durLabel, whenLabel, dayMonth } from '../lib/dates';
@@ -18,7 +18,7 @@ export function Booking({ slug, serviceId, query }: { slug: string; serviceId: s
   const svc = p?.services.find(x => x.id === serviceId);
   const rescheduleOf = query.get('remarcar') ?? undefined;
   const original = rescheduleOf ? s.bookings.find(b => b.id === rescheduleOf) : undefined;
-  const pets = s.pets.filter(x => !x.archived);
+  const pets = myPets(s);
   const [petId, setPetId] = useState<string | null>(original?.petId ?? s.selectedPetId ?? pets[0]?.id ?? null);
   const pet = pets.find(x => x.id === petId) ?? null;
   const size = pet?.size ?? original?.size ?? 'medio';
@@ -70,7 +70,7 @@ export function Booking({ slug, serviceId, query }: { slug: string; serviceId: s
     const st = getState();
     if (from === 'horario' || from === 'login') {
       if (!st.tutor) return setStep('login');
-      if (!st.pets.some(x => !x.archived)) return setStep('pet');
+      if (!myPets(st).length) return setStep('pet');
       return setStep('resumo');
     }
     if (from === 'pet') return setStep('resumo');

@@ -136,6 +136,8 @@ export interface Pet {
   size: Size;
   breed?: string;
   archived?: boolean;
+  /** telefone (só dígitos) do tutor dono do pet */
+  ownerPhone?: string;
 }
 
 export interface Tutor {
@@ -171,6 +173,8 @@ export interface Message {
   /** mensagens para o prestador ficam fora da caixa do tutor */
   to: 'tutor' | 'prestador';
   providerId?: string;
+  /** tutor destinatário (só dígitos). Sem isso, vale o tutor do agendamento. */
+  tutorPhone?: string;
 }
 
 export interface AppState {

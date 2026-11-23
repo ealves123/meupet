@@ -33,7 +33,7 @@ export function ProviderPanel({ initialMode = 'entrar' }: { initialMode?: 'entra
   const hasServices = p.services.some(x => x.active);
   return (
     <div className="provider">
-      <TopBar title={p.name} onBack={() => go('/')} right={<button className="link sm" onClick={() => { logoutProvider(); go('/'); toast('Você saiu do painel.'); }}>Sair</button>} />
+      <TopBar title={p.name} onBack={() => go('/')} right={<button className="btn sm ghost danger" onClick={() => { logoutProvider(); go('/'); toast('Você saiu do painel.'); }}>Sair</button>} />
       {!hasServices && <div className="notice warn">Você ainda não aparece no mapa: cadastre ao menos um serviço ativo na aba Serviços.</div>}
       <div className="tabs" role="tablist">
         {(['pedidos', 'agenda', 'servicos', 'horarios', 'indicadores'] as Tab[]).map(t => (

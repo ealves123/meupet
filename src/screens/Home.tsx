@@ -1,9 +1,9 @@
-import { useStore } from '../lib/store';
+import { useStore, logout, logoutProvider } from '../lib/store';
 import { ratingOf } from '../lib/rating';
 import { PILOT_TYPES, TYPE_EMOJI, TYPE_LABEL, STATUS_LABEL } from '../lib/labels';
 import { whenLabel } from '../lib/dates';
 import { go } from '../lib/router';
-import { Stars } from '../components/ui';
+import { Stars, toast } from '../components/ui';
 import { InstallHint } from '../components/InstallHint';
 import { exploreType } from './Explore';
 
@@ -44,7 +44,13 @@ export function Home() {
   return (
     <div className="home">
       <header className="home-hero">
-        <div className="home-brand"><span className="logo" aria-hidden>🐾</span> meuPet</div>
+        <div className="home-top">
+          <div className="home-brand"><span className="logo" aria-hidden>🐾</span> meuPet</div>
+          <div className="home-access">
+            {!s.tutor && <button onClick={() => go('/entrar')}>Entrar</button>}
+            <button className="pro" onClick={() => go('/prestador')}>{prov ? 'Meu painel' : 'Sou prestador'}</button>
+          </div>
+        </div>
         <div className="home-blobs" aria-hidden><span>🐕</span><span>🐈</span><span>🛁</span></div>
         <h1>{firstName ? <>Oi, {firstName}! O que o seu pet precisa hoje?</> : <>Cuidado para o seu pet, pertinho de casa</>}</h1>
         <p>Banho e tosa, veterinário, pet shop e adestramento em Alphaville e região, com horário confirmado pelo prestador.</p>
@@ -55,7 +61,7 @@ export function Home() {
 
       <InstallHint />
 
-      {(next || prov) && (
+      {(s.tutor || prov) && (
         <section className="home-now">
           {next && nextP && (
             <button className="now-card" onClick={() => go(`/agendamento/${next.id}`)}>
@@ -68,6 +74,13 @@ export function Home() {
               <span className="chev" aria-hidden>›</span>
             </button>
           )}
+          {s.tutor && (
+            <div className="session">
+              <span className="session-av">🐶</span>
+              <span className="session-who"><small>Tutor conectado</small><b>{s.tutor.name}</b></span>
+              <button className="btn sm ghost danger" onClick={() => { logout(); toast('Você saiu da conta de tutor.'); }}>Sair</button>
+            </div>
+          )}
           {prov && (
             <button className="now-card dark" onClick={() => go('/prestador')}>
               <span className="now-icon" style={{ background: prov.color }}>{prov.emoji}</span>
@@ -78,6 +91,13 @@ export function Home() {
               </span>
               <span className="chev" aria-hidden>›</span>
             </button>
+          )}
+          {prov && (
+            <div className="session">
+              <span className="session-av pro">🏪</span>
+              <span className="session-who"><small>Prestador conectado</small><b>{prov.name}</b></span>
+              <button className="btn sm ghost danger" onClick={() => { logoutProvider(); toast('Você saiu do painel do prestador.'); }}>Sair</button>
+            </div>
           )}
         </section>
       )}

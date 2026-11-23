@@ -22,7 +22,11 @@ function load(): AppState {
     const raw = localStorage.getItem(KEY);
     if (raw) {
       const s = JSON.parse(raw) as AppState;
-      if (s.version === VERSION) return s;
+      if (s.version === VERSION) {
+        // pets criados antes de existir ownerPhone ficam com o tutor que estava logado
+        for (const p of s.pets) if (!p.ownerPhone && s.tutor) p.ownerPhone = onlyDigits(s.tutor.phone);
+        return s;
+      }
     }
   } catch { /* sem storage: segue em memória */ }
   return buildSeed();
@@ -49,14 +53,26 @@ const uid = (p: string) => `${p}${Date.now().toString(36)}${Math.random().toStri
 export function resetDemo() { state = buildSeed(); save(); }
 
 // ---------- tutor ----------
-export function loginTutor(t: Tutor) { set(s => { s.tutor = t; }); }
-export function logout() { set(s => { s.tutor = null; }); }
+/** Pets ativos do tutor logado. Vários tutores podem usar o mesmo aparelho. */
+export function myPets(s: AppState) {
+  const me = s.tutor && onlyDigits(s.tutor.phone);
+  return me ? s.pets.filter(p => !p.archived && p.ownerPhone === me) : [];
+}
+/** Mensagens do tutor logado: as dirigidas a ele ou aos agendamentos dele. */
+export function tutorInbox(s: AppState) {
+  const me = s.tutor && onlyDigits(s.tutor.phone);
+  if (!me) return [];
+  return s.messages.filter(m => m.to === 'tutor' &&
+    onlyDigits(m.tutorPhone ?? s.bookings.find(b => b.id === m.bookingId)?.tutorPhone ?? '') === me);
+}
+export function loginTutor(t: Tutor) { set(s => { s.tutor = t; s.selectedPetId = myPets(s)[0]?.id ?? null; }); }
+export function logout() { set(s => { s.tutor = null; s.selectedPetId = null; }); }
 export function updateTutor(p: Partial<Tutor>) { set(s => { if (s.tutor) Object.assign(s.tutor, p); }); }
 export function savePet(p: Omit<Pet, 'id'> & { id?: string }) {
   let id = p.id ?? uid('pet');
   set(s => {
     const ex = s.pets.find(x => x.id === p.id);
-    if (ex) Object.assign(ex, p); else { s.pets.push({ ...p, id }); }
+    if (ex) Object.assign(ex, p); else { s.pets.push({ ...p, id, ownerPhone: s.tutor ? onlyDigits(s.tutor.phone) : undefined }); }
     if (!s.selectedPetId) s.selectedPetId = id;
   });
   return id;
@@ -69,7 +85,7 @@ export function archivePet(id: string) {
     for (const b of s.bookings) if (b.petId === id && b.status === 'confirmado' && new Date(b.start) > now) {
       b.status = 'cancelado_tutor'; b.cancelReason = 'Pet arquivado';
     }
-    if (s.selectedPetId === id) s.selectedPetId = s.pets.find(x => !x.archived)?.id ?? null;
+    if (s.selectedPetId === id) s.selectedPetId = myPets(s)[0]?.id ?? null;
   });
 }
 
@@ -77,7 +93,7 @@ export function archivePet(id: string) {
 export function sendLoginCode(phone: string) {
   const code = String(1000 + Math.floor(Math.random() * 9000));
   set(s => {
-    s.messages.push({ id: uid('m'), channel: 'whatsapp', to: 'tutor', kind: 'codigo', sendAt: new Date().toISOString(), title: 'Código de acesso', body: `Seu código do meuPet é ${code}. Não compartilhe com ninguém. (${phone})` });
+    s.messages.push({ id: uid('m'), channel: 'whatsapp', to: 'tutor', tutorPhone: onlyDigits(phone), kind: 'codigo', sendAt: new Date().toISOString(), title: 'Código de acesso', body: `Seu código do meuPet é ${code}. Não compartilhe com ninguém. (${phone})` });
   });
   return code;
 }

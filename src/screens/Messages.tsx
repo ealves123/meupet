@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useStore, confirmPresence, answerProposal } from '../lib/store';
+import { useStore, confirmPresence, answerProposal, tutorInbox } from '../lib/store';
 import { TopBar, Empty, toast } from '../components/ui';
 import { whenLabel } from '../lib/dates';
 import { go } from '../lib/router';
@@ -9,7 +9,7 @@ export function Messages() {
   const s = useStore();
   const [showFuture, setShowFuture] = useState(false);
   const now = Date.now();
-  const mine = s.messages.filter(m => m.to === 'tutor');
+  const mine = tutorInbox(s);
   const sent = mine.filter(m => new Date(m.sendAt).getTime() <= now).sort((a, b) => b.sendAt.localeCompare(a.sendAt));
   const future = mine.filter(m => new Date(m.sendAt).getTime() > now).sort((a, b) => a.sendAt.localeCompare(b.sendAt));
   const act = (a: string, bookingId?: string, proposalId?: string) => {
