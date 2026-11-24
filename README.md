@@ -26,10 +26,10 @@ por porte), horário de funcionamento, regras da agenda, pausar agenda, e indica
 
 ## O que está simulado
 
-- 12 prestadores fictícios e a agenda deles (`src/lib/seed.ts`).
+- 19 prestadores fictícios e a agenda deles (`src/lib/seed.ts`): 12 em Alphaville e arredores e 7 no ABC.
 - Os dados ficam no `localStorage` do aparelho (`src/lib/store.ts`).
 - Código de login e mensagens aparecem na aba Mensagens.
-- Busca de endereço com uma lista fixa de lugares (`src/lib/geo.ts`).
+- Busca por CEP (faixas de Barueri, Santana de Parnaíba, Santo André, São Bernardo e São Caetano) e por nome de bairro, com lista fixa de lugares (`src/lib/geo.ts`). O CEP leva ao centro da cidade; rua e número ficam para a fase 2.
 
 ## Suposições seguidas (marcadas no app com a etiqueta "suposição")
 

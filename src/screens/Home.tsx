@@ -8,7 +8,7 @@ import { InstallHint } from '../components/InstallHint';
 import { exploreType } from './Explore';
 
 const TUTOR_STEPS = [
-  ['🗺️', 'Encontre perto de casa', 'Mapa com quem atende em Alphaville, Tamboré e Aldeia da Serra.'],
+  ['🗺️', 'Encontre perto de casa', 'Busque pelo CEP ou bairro em Alphaville e região e no ABC.'],
   ['📅', 'Peça um horário', 'Só aparecem horários livres de verdade, já com o preço do porte do seu pet.'],
   ['✅', 'O prestador confirma', 'Você acompanha o pedido e recebe a confirmação no WhatsApp.'],
   ['🔔', 'Lembretes e detalhes', 'Avisos 24 h e 2 h antes, endereço, contato e histórico em um lugar.'],
@@ -53,7 +53,7 @@ export function Home() {
         </div>
         <div className="home-blobs" aria-hidden><span>🐕</span><span>🐈</span><span>🛁</span></div>
         <h1>{firstName ? <>Oi, {firstName}! O que o seu pet precisa hoje?</> : <>Cuidado para o seu pet, pertinho de casa</>}</h1>
-        <p>Banho e tosa, veterinário, pet shop e adestramento em Alphaville e região, com horário confirmado pelo prestador.</p>
+        <p>Banho e tosa, veterinário, pet shop e adestramento em Alphaville e no ABC, com horário confirmado pelo prestador.</p>
         <button className="home-search" onClick={() => exploreType(null)}>
           <span aria-hidden>🔎</span><span>Encontrar serviços perto de mim</span><b aria-hidden>›</b>
         </button>
@@ -167,7 +167,7 @@ export function Home() {
       </section>
 
       <footer className="home-foot">
-        <span>meuPet · Alphaville, Barueri (SP)</span>
+        <span>meuPet · Alphaville e ABC (SP)</span>
         <button className="link" onClick={() => go('/sobre')}>Sobre este protótipo</button>
       </footer>
     </div>

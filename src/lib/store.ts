@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import type { AppState, Booking, Message, Pet, Tutor, Size, Block, Review, Service, ServiceType, Provider } from './types';
-import { buildSeed } from './seed';
+import { buildSeed, SEED_PROVIDERS } from './seed';
 import { addMin, hhmm, whenLabel, startOfDay, addDays } from './dates';
 import { daySlots, fitsExtension, nearestFree } from './slots';
 import { brl, onlyDigits } from './labels';
@@ -25,11 +25,23 @@ function load(): AppState {
       if (s.version === VERSION) {
         // pets criados antes de existir ownerPhone ficam com o tutor que estava logado
         for (const p of s.pets) if (!p.ownerPhone && s.tutor) p.ownerPhone = onlyDigits(s.tutor.phone);
+        addNewSeedProviders(s);
         return s;
       }
     }
   } catch { /* sem storage: segue em memória */ }
   return buildSeed();
+}
+/** Prestadores de exemplo novos (ex.: ABC) entram nos dados já salvos sem apagar o que o usuário fez. */
+function addNewSeedProviders(s: AppState) {
+  const missing = new Set(SEED_PROVIDERS.map(p => p.id).filter(id => !s.providers.some(p => p.id === id)));
+  if (!missing.size) return;
+  const fresh = buildSeed();
+  s.providers.push(...fresh.providers.filter(p => missing.has(p.id)));
+  s.providerAccounts.push(...fresh.providerAccounts.filter(a => missing.has(a.providerId) && !s.providerAccounts.some(x => x.phone === a.phone)));
+  s.bookings.push(...fresh.bookings.filter(b => missing.has(b.providerId)).map(b => ({ ...b, id: `${b.id}-${b.providerId}` })));
+  s.blocks.push(...fresh.blocks.filter(b => missing.has(b.providerId)));
+  s.reviews.push(...fresh.reviews.filter(r => missing.has(r.providerId)));
 }
 function save() {
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* ignora */ }

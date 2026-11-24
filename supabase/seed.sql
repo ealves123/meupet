@@ -1,7 +1,7 @@
 -- meuPet: prestadores FICTÍCIOS para demonstração (gerado a partir de src/lib/seed.ts).
 -- Rode depois das migrações. Pode rodar de novo enquanto ninguém tiver agendado com eles: apaga e recria só estes prestadores.
 begin;
-delete from public.prestadores where id in ('42fcd9fa-19bc-4bff-a3dc-4a7e282899b8', '46a7838f-39e2-4135-afee-ad364bf0856e', '30914b13-48c3-409d-a16d-ae2e442063a7', '2f955f45-d069-40eb-a8bf-d15ecf4d00fa', '5b540b8c-3626-4001-ad2c-4b6cb86b73e1', 'b10dc682-582a-46fb-abf0-892f0d8112ab', '7eb0468a-5498-458b-a670-517840a08fc4', '4b10f564-8a53-4878-a509-bdbffd339efc', '711744fc-8722-409f-aadf-6701e9ef43e2', 'd898f5e8-e966-4a2a-a78a-473adf0e8e44', '1b12f9d0-a87a-46e5-ac1d-016c7480bb15', '99a952ff-12ca-4d81-a5f1-0bdb6c160657');
+delete from public.prestadores where id in ('42fcd9fa-19bc-4bff-a3dc-4a7e282899b8', '46a7838f-39e2-4135-afee-ad364bf0856e', '30914b13-48c3-409d-a16d-ae2e442063a7', '2f955f45-d069-40eb-a8bf-d15ecf4d00fa', '5b540b8c-3626-4001-ad2c-4b6cb86b73e1', 'b10dc682-582a-46fb-abf0-892f0d8112ab', '7eb0468a-5498-458b-a670-517840a08fc4', '4b10f564-8a53-4878-a509-bdbffd339efc', '711744fc-8722-409f-aadf-6701e9ef43e2', 'd898f5e8-e966-4a2a-a78a-473adf0e8e44', '1b12f9d0-a87a-46e5-ac1d-016c7480bb15', '99a952ff-12ca-4d81-a5f1-0bdb6c160657', 'bff47848-a10e-4647-a60e-6ba3b55f1c94', '3f2e0ded-cc3c-4211-a1f6-683a153783de', 'effbc03e-da25-4444-a656-613aa34a56c2', '6768db63-d4d0-4995-ad8e-e7edb247777e', '0f72c0cd-f5c0-4045-a999-7bd4bb710241', 'df9f37bc-cbac-410b-a318-b35fd1992582', '5b6b96c0-d498-493c-a88b-0cdcedd6ca04');
 
 -- Bicho Cheiroso
 insert into public.prestadores (id, slug, nome, tipos, descricao, endereco, bairro, telefone, lat, lng, passo_min, limpeza_min, antecedencia_min, janela_cancelamento_h, pagamentos, cor, emoji) values ('42fcd9fa-19bc-4bff-a3dc-4a7e282899b8', 'bicho-cheiroso-rio-negro', 'Bicho Cheiroso', '{"banho_tosa","petshop"}', 'Banho e tosa com secagem silenciosa e espaço separado para gatos.', 'Alameda Rio Negro, 1030 – loja 12', 'Alphaville, Barueri', '(11) 4191-0001', -23.4979, -46.8501, 30, 15, 120, 2, '{"Pix","Cartão de crédito","Cartão de débito"}', '#0ea5e9', '🛁');
@@ -138,6 +138,95 @@ insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_par
 insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('564846b7-bec6-4156-a9e2-de19949111da', 'mini', 30, 50), ('564846b7-bec6-4156-a9e2-de19949111da', 'pequeno', 30, 50), ('564846b7-bec6-4156-a9e2-de19949111da', 'medio', 30, 50), ('564846b7-bec6-4156-a9e2-de19949111da', 'grande', 30, 50), ('564846b7-bec6-4156-a9e2-de19949111da', 'gigante', 30, 50);
 insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('5816bbbe-8952-4d28-a651-2196d5c929a6', '99a952ff-12ca-4d81-a5f1-0bdb6c160657', 'Hidratação de pelos', 'petshop', '{"cao","gato"}', false, true);
 insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('5816bbbe-8952-4d28-a651-2196d5c929a6', 'mini', 30, 45), ('5816bbbe-8952-4d28-a651-2196d5c929a6', 'pequeno', 30, 45), ('5816bbbe-8952-4d28-a651-2196d5c929a6', 'medio', 30, 55), ('5816bbbe-8952-4d28-a651-2196d5c929a6', 'grande', 30, 65), ('5816bbbe-8952-4d28-a651-2196d5c929a6', 'gigante', 30, 75);
+
+-- Banho & Charme
+insert into public.prestadores (id, slug, nome, tipos, descricao, endereco, bairro, telefone, lat, lng, passo_min, limpeza_min, antecedencia_min, janela_cancelamento_h, pagamentos, cor, emoji) values ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'banho-e-charme-santo-andre', 'Banho & Charme', '{"banho_tosa","petshop"}', 'Banho e tosa com hora marcada e hidratação para pelos longos.', 'Rua das Figueiras, 1210', 'Jardim, Santo André', '(11) 4191-0013', -23.6553, -46.5296, 30, 15, 120, 2, '{"Pix","Cartão de crédito","Cartão de débito"}', '#0ea5e9', '🛁');
+insert into public.profissionais (id, prestador_id, nome, ordem) values ('2789b16c-3e2d-44e1-a37c-2b69a0372c81', 'bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Patrícia', 0), ('94108970-2965-4850-aa50-b29a04af82cc', 'bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Léo', 1);
+insert into public.horarios (prestador_id, dia_semana, abre_min, fecha_min) values ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 1, 480, 1080), ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 2, 480, 1080), ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 3, 480, 1080), ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 4, 480, 1080), ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 5, 480, 1080), ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 6, 480, 840);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('eeea3e7f-3ca6-4136-af7a-e02077e9eb0f', 'bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Banho', 'banho_tosa', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('eeea3e7f-3ca6-4136-af7a-e02077e9eb0f', 'mini', 45, 60), ('eeea3e7f-3ca6-4136-af7a-e02077e9eb0f', 'pequeno', 60, 70), ('eeea3e7f-3ca6-4136-af7a-e02077e9eb0f', 'medio', 75, 85), ('eeea3e7f-3ca6-4136-af7a-e02077e9eb0f', 'grande', 90, 105), ('eeea3e7f-3ca6-4136-af7a-e02077e9eb0f', 'gigante', 120, 130);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('8b01d167-910e-4482-a0de-997f4ef6dc15', 'bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Banho e tosa', 'banho_tosa', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('8b01d167-910e-4482-a0de-997f4ef6dc15', 'mini', 75, 95), ('8b01d167-910e-4482-a0de-997f4ef6dc15', 'pequeno', 90, 110), ('8b01d167-910e-4482-a0de-997f4ef6dc15', 'medio', 105, 130), ('8b01d167-910e-4482-a0de-997f4ef6dc15', 'grande', 120, 155), ('8b01d167-910e-4482-a0de-997f4ef6dc15', 'gigante', 150, 185);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('30e111c9-aa8a-4556-a461-e1e69a302e82', 'bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Tosa higiênica', 'banho_tosa', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('30e111c9-aa8a-4556-a461-e1e69a302e82', 'mini', 30, 40), ('30e111c9-aa8a-4556-a461-e1e69a302e82', 'pequeno', 30, 40), ('30e111c9-aa8a-4556-a461-e1e69a302e82', 'medio', 30, 40), ('30e111c9-aa8a-4556-a461-e1e69a302e82', 'grande', 30, 40), ('30e111c9-aa8a-4556-a461-e1e69a302e82', 'gigante', 30, 40);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('a650c059-49c7-4717-acca-bcf2d13ff77a', 'bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Hidratação de pelos', 'petshop', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('a650c059-49c7-4717-acca-bcf2d13ff77a', 'mini', 30, 35), ('a650c059-49c7-4717-acca-bcf2d13ff77a', 'pequeno', 30, 35), ('a650c059-49c7-4717-acca-bcf2d13ff77a', 'medio', 30, 45), ('a650c059-49c7-4717-acca-bcf2d13ff77a', 'grande', 30, 55), ('a650c059-49c7-4717-acca-bcf2d13ff77a', 'gigante', 30, 65);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('3bfcd35f-e814-4326-ae40-7808ffab4954', 'bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Corte de unhas', 'petshop', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('3bfcd35f-e814-4326-ae40-7808ffab4954', 'mini', 15, 18), ('3bfcd35f-e814-4326-ae40-7808ffab4954', 'pequeno', 15, 18), ('3bfcd35f-e814-4326-ae40-7808ffab4954', 'medio', 15, 18), ('3bfcd35f-e814-4326-ae40-7808ffab4954', 'grande', 15, 18), ('3bfcd35f-e814-4326-ae40-7808ffab4954', 'gigante', 15, 18);
+
+-- VetVida Santo André
+insert into public.prestadores (id, slug, nome, tipos, descricao, endereco, bairro, telefone, lat, lng, passo_min, limpeza_min, antecedencia_min, janela_cancelamento_h, pagamentos, cor, emoji) values ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'vetvida-santo-andre', 'VetVida Santo André', '{"veterinario"}', 'Clínica geral e vacinas para cães e gatos.', 'Av. Portugal, 820', 'Centro, Santo André', '(11) 4191-0014', -23.6612, -46.5368, 15, 0, 120, 12, '{"Pix","Cartão de crédito","Cartão de débito"}', '#ef4444', '🩺');
+insert into public.profissionais (id, prestador_id, nome, ordem) values ('79b3c47b-18e9-4a69-ab03-dda6a3399a7d', '3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Dra. Renata', 0), ('a2b69778-514d-4b61-ad28-98d8df93f206', '3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Dr. Murilo', 1);
+insert into public.horarios (prestador_id, dia_semana, abre_min, fecha_min) values ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 1, 480, 1140), ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 2, 480, 1140), ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 3, 480, 1140), ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 4, 480, 1140), ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 5, 480, 1140), ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 6, 480, 840);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('a5181e61-f902-4b41-aef4-b184b578bab0', '3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Consulta clínica', 'veterinario', '{"cao","gato","outro"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('a5181e61-f902-4b41-aef4-b184b578bab0', 'mini', 30, 190), ('a5181e61-f902-4b41-aef4-b184b578bab0', 'pequeno', 30, 190), ('a5181e61-f902-4b41-aef4-b184b578bab0', 'medio', 30, 190), ('a5181e61-f902-4b41-aef4-b184b578bab0', 'grande', 30, 190), ('a5181e61-f902-4b41-aef4-b184b578bab0', 'gigante', 30, 190);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('aeb1ac38-0e3b-4d29-a518-674895f6eec4', '3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Vacinação', 'veterinario', '{"cao","gato"}', true, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('aeb1ac38-0e3b-4d29-a518-674895f6eec4', 'mini', 15, 100), ('aeb1ac38-0e3b-4d29-a518-674895f6eec4', 'pequeno', 15, 100), ('aeb1ac38-0e3b-4d29-a518-674895f6eec4', 'medio', 15, 100), ('aeb1ac38-0e3b-4d29-a518-674895f6eec4', 'grande', 15, 100), ('aeb1ac38-0e3b-4d29-a518-674895f6eec4', 'gigante', 15, 100);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('21f08966-346a-46fa-af45-391c23950246', '3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Retorno de consulta', 'veterinario', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('21f08966-346a-46fa-af45-391c23950246', 'mini', 15, 0), ('21f08966-346a-46fa-af45-391c23950246', 'pequeno', 15, 0), ('21f08966-346a-46fa-af45-391c23950246', 'medio', 15, 0), ('21f08966-346a-46fa-af45-391c23950246', 'grande', 15, 0), ('21f08966-346a-46fa-af45-391c23950246', 'gigante', 15, 0);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('a5cc7720-2f66-4f84-ace7-138b7deadcc8', '3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Exames de sangue (coleta)', 'veterinario', '{"cao","gato"}', true, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('a5cc7720-2f66-4f84-ace7-138b7deadcc8', 'mini', 15, null), ('a5cc7720-2f66-4f84-ace7-138b7deadcc8', 'pequeno', 15, null), ('a5cc7720-2f66-4f84-ace7-138b7deadcc8', 'medio', 15, null), ('a5cc7720-2f66-4f84-ace7-138b7deadcc8', 'grande', 15, null), ('a5cc7720-2f66-4f84-ace7-138b7deadcc8', 'gigante', 15, null);
+
+-- Rudge Pet
+insert into public.prestadores (id, slug, nome, tipos, descricao, endereco, bairro, telefone, lat, lng, passo_min, limpeza_min, antecedencia_min, janela_cancelamento_h, pagamentos, cor, emoji) values ('effbc03e-da25-4444-a656-613aa34a56c2', 'rudge-pet-sao-bernardo', 'Rudge Pet', '{"petshop","banho_tosa"}', 'Pet shop de bairro com banho, tosa e corte de unhas.', 'Rua Afonsina, 310', 'Rudge Ramos, São Bernardo do Campo', '(11) 4191-0015', -23.6596, -46.5712, 30, 15, 120, 2, '{"Pix","Cartão de crédito","Cartão de débito"}', '#f59e0b', '🦴');
+insert into public.profissionais (id, prestador_id, nome, ordem) values ('800c52f1-e331-4e16-abe2-d09ca122dbaf', 'effbc03e-da25-4444-a656-613aa34a56c2', 'Sandra', 0), ('8679671b-766f-4e48-a177-2ea5f64f0348', 'effbc03e-da25-4444-a656-613aa34a56c2', 'Igor', 1);
+insert into public.horarios (prestador_id, dia_semana, abre_min, fecha_min) values ('effbc03e-da25-4444-a656-613aa34a56c2', 1, 480, 1080), ('effbc03e-da25-4444-a656-613aa34a56c2', 2, 480, 1080), ('effbc03e-da25-4444-a656-613aa34a56c2', 3, 480, 1080), ('effbc03e-da25-4444-a656-613aa34a56c2', 4, 480, 1080), ('effbc03e-da25-4444-a656-613aa34a56c2', 5, 480, 1080), ('effbc03e-da25-4444-a656-613aa34a56c2', 6, 480, 840);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('c8c81133-18cc-4060-a806-c1a4803c2de3', 'effbc03e-da25-4444-a656-613aa34a56c2', 'Banho', 'banho_tosa', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('c8c81133-18cc-4060-a806-c1a4803c2de3', 'mini', 45, 55), ('c8c81133-18cc-4060-a806-c1a4803c2de3', 'pequeno', 60, 65), ('c8c81133-18cc-4060-a806-c1a4803c2de3', 'medio', 75, 80), ('c8c81133-18cc-4060-a806-c1a4803c2de3', 'grande', 90, 100), ('c8c81133-18cc-4060-a806-c1a4803c2de3', 'gigante', 120, 125);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('9ed6b202-3fc0-419c-ab72-90d5c64678e2', 'effbc03e-da25-4444-a656-613aa34a56c2', 'Banho e tosa', 'banho_tosa', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('9ed6b202-3fc0-419c-ab72-90d5c64678e2', 'mini', 75, 85), ('9ed6b202-3fc0-419c-ab72-90d5c64678e2', 'pequeno', 90, 100), ('9ed6b202-3fc0-419c-ab72-90d5c64678e2', 'medio', 105, 120), ('9ed6b202-3fc0-419c-ab72-90d5c64678e2', 'grande', 120, 145), ('9ed6b202-3fc0-419c-ab72-90d5c64678e2', 'gigante', 150, 175);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('5c5e660f-30ce-48a4-a0bd-80a723de6424', 'effbc03e-da25-4444-a656-613aa34a56c2', 'Corte de unhas', 'petshop', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('5c5e660f-30ce-48a4-a0bd-80a723de6424', 'mini', 15, 15), ('5c5e660f-30ce-48a4-a0bd-80a723de6424', 'pequeno', 15, 15), ('5c5e660f-30ce-48a4-a0bd-80a723de6424', 'medio', 15, 15), ('5c5e660f-30ce-48a4-a0bd-80a723de6424', 'grande', 15, 15), ('5c5e660f-30ce-48a4-a0bd-80a723de6424', 'gigante', 15, 15);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('8e13d1d5-4e26-4002-a603-431244ba5cbb', 'effbc03e-da25-4444-a656-613aa34a56c2', 'Hidratação de pelos', 'petshop', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('8e13d1d5-4e26-4002-a603-431244ba5cbb', 'mini', 30, 30), ('8e13d1d5-4e26-4002-a603-431244ba5cbb', 'pequeno', 30, 30), ('8e13d1d5-4e26-4002-a603-431244ba5cbb', 'medio', 30, 40), ('8e13d1d5-4e26-4002-a603-431244ba5cbb', 'grande', 30, 50), ('8e13d1d5-4e26-4002-a603-431244ba5cbb', 'gigante', 30, 60);
+
+-- Clínica Vet Anchieta
+insert into public.prestadores (id, slug, nome, tipos, descricao, endereco, bairro, telefone, lat, lng, passo_min, limpeza_min, antecedencia_min, janela_cancelamento_h, pagamentos, cor, emoji) values ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'clinica-vet-anchieta-sbc', 'Clínica Vet Anchieta', '{"veterinario"}', 'Consultas, vacinas e coleta de exames. Atende sábado e domingo de manhã.', 'Rua Marechal Deodoro, 1500', 'Centro, São Bernardo do Campo', '(11) 4191-0016', -23.6921, -46.5618, 15, 0, 120, 12, '{"Pix","Cartão de crédito","Cartão de débito"}', '#ef4444', '🩺');
+insert into public.profissionais (id, prestador_id, nome, ordem) values ('3d7a7a83-58ae-45fe-af8f-b25c26096eea', '6768db63-d4d0-4995-ad8e-e7edb247777e', 'Dr. Otávio', 0), ('6a0aded9-ea75-4e2a-ae4a-9b2bcd366cff', '6768db63-d4d0-4995-ad8e-e7edb247777e', 'Dra. Carol', 1);
+insert into public.horarios (prestador_id, dia_semana, abre_min, fecha_min) values ('6768db63-d4d0-4995-ad8e-e7edb247777e', 0, 540, 780), ('6768db63-d4d0-4995-ad8e-e7edb247777e', 1, 480, 1200), ('6768db63-d4d0-4995-ad8e-e7edb247777e', 2, 480, 1200), ('6768db63-d4d0-4995-ad8e-e7edb247777e', 3, 480, 1200), ('6768db63-d4d0-4995-ad8e-e7edb247777e', 4, 480, 1200), ('6768db63-d4d0-4995-ad8e-e7edb247777e', 5, 480, 1200), ('6768db63-d4d0-4995-ad8e-e7edb247777e', 6, 480, 960);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('3a8fc1d6-7eb7-4521-a161-df248ae6980d', '6768db63-d4d0-4995-ad8e-e7edb247777e', 'Consulta clínica', 'veterinario', '{"cao","gato","outro"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('3a8fc1d6-7eb7-4521-a161-df248ae6980d', 'mini', 30, 210), ('3a8fc1d6-7eb7-4521-a161-df248ae6980d', 'pequeno', 30, 210), ('3a8fc1d6-7eb7-4521-a161-df248ae6980d', 'medio', 30, 210), ('3a8fc1d6-7eb7-4521-a161-df248ae6980d', 'grande', 30, 210), ('3a8fc1d6-7eb7-4521-a161-df248ae6980d', 'gigante', 30, 210);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('d43d382f-e882-493c-abef-bc532abdb2fe', '6768db63-d4d0-4995-ad8e-e7edb247777e', 'Vacinação', 'veterinario', '{"cao","gato"}', true, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('d43d382f-e882-493c-abef-bc532abdb2fe', 'mini', 15, 105), ('d43d382f-e882-493c-abef-bc532abdb2fe', 'pequeno', 15, 105), ('d43d382f-e882-493c-abef-bc532abdb2fe', 'medio', 15, 105), ('d43d382f-e882-493c-abef-bc532abdb2fe', 'grande', 15, 105), ('d43d382f-e882-493c-abef-bc532abdb2fe', 'gigante', 15, 105);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('8bb39e2d-ec36-452f-a835-90753e16584f', '6768db63-d4d0-4995-ad8e-e7edb247777e', 'Retorno de consulta', 'veterinario', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('8bb39e2d-ec36-452f-a835-90753e16584f', 'mini', 15, 0), ('8bb39e2d-ec36-452f-a835-90753e16584f', 'pequeno', 15, 0), ('8bb39e2d-ec36-452f-a835-90753e16584f', 'medio', 15, 0), ('8bb39e2d-ec36-452f-a835-90753e16584f', 'grande', 15, 0), ('8bb39e2d-ec36-452f-a835-90753e16584f', 'gigante', 15, 0);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('0cde1716-a78e-4c4b-a018-f992bd0923d3', '6768db63-d4d0-4995-ad8e-e7edb247777e', 'Exames de sangue (coleta)', 'veterinario', '{"cao","gato"}', true, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('0cde1716-a78e-4c4b-a018-f992bd0923d3', 'mini', 15, null), ('0cde1716-a78e-4c4b-a018-f992bd0923d3', 'pequeno', 15, null), ('0cde1716-a78e-4c4b-a018-f992bd0923d3', 'medio', 15, null), ('0cde1716-a78e-4c4b-a018-f992bd0923d3', 'grande', 15, null), ('0cde1716-a78e-4c4b-a018-f992bd0923d3', 'gigante', 15, null);
+
+-- Adestra ABC
+insert into public.prestadores (id, slug, nome, tipos, descricao, endereco, bairro, telefone, lat, lng, passo_min, limpeza_min, antecedencia_min, janela_cancelamento_h, pagamentos, cor, emoji) values ('0f72c0cd-f5c0-4045-a999-7bd4bb710241', 'adestra-abc', 'Adestra ABC', '{"adestramento"}', 'Adestramento positivo e socialização de filhotes.', 'Av. Pery Ronchetti, 400', 'Nova Petrópolis, São Bernardo do Campo', '(11) 4191-0017', -23.6985, -46.5525, 30, 30, 120, 24, '{"Pix","Cartão de crédito","Cartão de débito"}', '#8b5cf6', '🎾');
+insert into public.profissionais (id, prestador_id, nome, ordem) values ('2f8c66f6-ab3b-4d07-a15f-c561c623104e', '0f72c0cd-f5c0-4045-a999-7bd4bb710241', 'Fábio', 0);
+insert into public.horarios (prestador_id, dia_semana, abre_min, fecha_min) values ('0f72c0cd-f5c0-4045-a999-7bd4bb710241', 1, 420, 720), ('0f72c0cd-f5c0-4045-a999-7bd4bb710241', 2, 420, 720), ('0f72c0cd-f5c0-4045-a999-7bd4bb710241', 3, 900, 1200), ('0f72c0cd-f5c0-4045-a999-7bd4bb710241', 4, 900, 1200), ('0f72c0cd-f5c0-4045-a999-7bd4bb710241', 5, 420, 720), ('0f72c0cd-f5c0-4045-a999-7bd4bb710241', 6, 480, 720);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('5d6eca2a-d0b5-4bca-a4ee-d127cc20bbf8', '0f72c0cd-f5c0-4045-a999-7bd4bb710241', 'Aula de adestramento', 'adestramento', '{"cao"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('5d6eca2a-d0b5-4bca-a4ee-d127cc20bbf8', 'mini', 60, 170), ('5d6eca2a-d0b5-4bca-a4ee-d127cc20bbf8', 'pequeno', 60, 170), ('5d6eca2a-d0b5-4bca-a4ee-d127cc20bbf8', 'medio', 60, 170), ('5d6eca2a-d0b5-4bca-a4ee-d127cc20bbf8', 'grande', 60, 170), ('5d6eca2a-d0b5-4bca-a4ee-d127cc20bbf8', 'gigante', 60, 170);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('db4d079f-b23c-4e47-a3f6-2f82fa5ec52a', '0f72c0cd-f5c0-4045-a999-7bd4bb710241', 'Avaliação comportamental', 'adestramento', '{"cao"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('db4d079f-b23c-4e47-a3f6-2f82fa5ec52a', 'mini', 45, 130), ('db4d079f-b23c-4e47-a3f6-2f82fa5ec52a', 'pequeno', 45, 130), ('db4d079f-b23c-4e47-a3f6-2f82fa5ec52a', 'medio', 45, 130), ('db4d079f-b23c-4e47-a3f6-2f82fa5ec52a', 'grande', 45, 130), ('db4d079f-b23c-4e47-a3f6-2f82fa5ec52a', 'gigante', 45, 130);
+
+-- São Caetano Pet Spa
+insert into public.prestadores (id, slug, nome, tipos, descricao, endereco, bairro, telefone, lat, lng, passo_min, limpeza_min, antecedencia_min, janela_cancelamento_h, pagamentos, cor, emoji) values ('df9f37bc-cbac-410b-a318-b35fd1992582', 'sao-caetano-pet-spa', 'São Caetano Pet Spa', '{"banho_tosa","petshop"}', 'Banho com ozônio, tosa da raça e espaço só para gatos às quartas.', 'Rua Manoel Coelho, 610', 'Santa Paula, São Caetano do Sul', '(11) 4191-0018', -23.6176, -46.5655, 30, 15, 120, 2, '{"Pix","Cartão de crédito","Cartão de débito"}', '#0ea5e9', '🛁');
+insert into public.profissionais (id, prestador_id, nome, ordem) values ('13c2c945-0e78-48d4-a904-1696a71afb6f', 'df9f37bc-cbac-410b-a318-b35fd1992582', 'Mirela', 0), ('e78a366f-808d-41a4-a132-914510fb477b', 'df9f37bc-cbac-410b-a318-b35fd1992582', 'Tati', 1);
+insert into public.horarios (prestador_id, dia_semana, abre_min, fecha_min) values ('df9f37bc-cbac-410b-a318-b35fd1992582', 1, 480, 1080), ('df9f37bc-cbac-410b-a318-b35fd1992582', 2, 480, 1080), ('df9f37bc-cbac-410b-a318-b35fd1992582', 3, 480, 1080), ('df9f37bc-cbac-410b-a318-b35fd1992582', 4, 480, 1080), ('df9f37bc-cbac-410b-a318-b35fd1992582', 5, 480, 1080), ('df9f37bc-cbac-410b-a318-b35fd1992582', 6, 480, 960);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('897119f4-6aeb-437d-a17d-844f27b4f9e6', 'df9f37bc-cbac-410b-a318-b35fd1992582', 'Banho', 'banho_tosa', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('897119f4-6aeb-437d-a17d-844f27b4f9e6', 'mini', 45, 75), ('897119f4-6aeb-437d-a17d-844f27b4f9e6', 'pequeno', 60, 85), ('897119f4-6aeb-437d-a17d-844f27b4f9e6', 'medio', 75, 100), ('897119f4-6aeb-437d-a17d-844f27b4f9e6', 'grande', 90, 120), ('897119f4-6aeb-437d-a17d-844f27b4f9e6', 'gigante', 120, 145);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('af24fb0c-b255-4f69-a392-7feac77f2317', 'df9f37bc-cbac-410b-a318-b35fd1992582', 'Banho e tosa', 'banho_tosa', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('af24fb0c-b255-4f69-a392-7feac77f2317', 'mini', 75, 120), ('af24fb0c-b255-4f69-a392-7feac77f2317', 'pequeno', 90, 135), ('af24fb0c-b255-4f69-a392-7feac77f2317', 'medio', 105, 155), ('af24fb0c-b255-4f69-a392-7feac77f2317', 'grande', 120, 180), ('af24fb0c-b255-4f69-a392-7feac77f2317', 'gigante', 150, 210);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('2b936b89-e4e8-422f-aa3b-898ea5be8500', 'df9f37bc-cbac-410b-a318-b35fd1992582', 'Tosa higiênica', 'banho_tosa', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('2b936b89-e4e8-422f-aa3b-898ea5be8500', 'mini', 30, 45), ('2b936b89-e4e8-422f-aa3b-898ea5be8500', 'pequeno', 30, 45), ('2b936b89-e4e8-422f-aa3b-898ea5be8500', 'medio', 30, 45), ('2b936b89-e4e8-422f-aa3b-898ea5be8500', 'grande', 30, 45), ('2b936b89-e4e8-422f-aa3b-898ea5be8500', 'gigante', 30, 45);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('c86cdc5a-1fde-4d62-af87-9bba686d95bd', 'df9f37bc-cbac-410b-a318-b35fd1992582', 'Hidratação de pelos', 'petshop', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('c86cdc5a-1fde-4d62-af87-9bba686d95bd', 'mini', 30, 40), ('c86cdc5a-1fde-4d62-af87-9bba686d95bd', 'pequeno', 30, 40), ('c86cdc5a-1fde-4d62-af87-9bba686d95bd', 'medio', 30, 50), ('c86cdc5a-1fde-4d62-af87-9bba686d95bd', 'grande', 30, 60), ('c86cdc5a-1fde-4d62-af87-9bba686d95bd', 'gigante', 30, 70);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('7d6144f0-2a81-4239-a334-10ce828fdf54', 'df9f37bc-cbac-410b-a318-b35fd1992582', 'Corte de unhas', 'petshop', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('7d6144f0-2a81-4239-a334-10ce828fdf54', 'mini', 15, 20), ('7d6144f0-2a81-4239-a334-10ce828fdf54', 'pequeno', 15, 20), ('7d6144f0-2a81-4239-a334-10ce828fdf54', 'medio', 15, 20), ('7d6144f0-2a81-4239-a334-10ce828fdf54', 'grande', 15, 20), ('7d6144f0-2a81-4239-a334-10ce828fdf54', 'gigante', 15, 20);
+
+-- Vet Barcelona
+insert into public.prestadores (id, slug, nome, tipos, descricao, endereco, bairro, telefone, lat, lng, passo_min, limpeza_min, antecedencia_min, janela_cancelamento_h, pagamentos, cor, emoji) values ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'vet-barcelona-sao-caetano', 'Vet Barcelona', '{"veterinario","petshop"}', 'Consultório veterinário com pet shop.', 'Rua Oswaldo Cruz, 250', 'Barcelona, São Caetano do Sul', '(11) 4191-0019', -23.6297, -46.5603, 15, 0, 120, 2, '{"Pix","Cartão de crédito","Cartão de débito"}', '#f59e0b', '🦴');
+insert into public.profissionais (id, prestador_id, nome, ordem) values ('0c5d24a6-a83f-4e33-a71c-0970b5083049', '5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Dra. Bruna', 0);
+insert into public.horarios (prestador_id, dia_semana, abre_min, fecha_min) values ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 1, 480, 1080), ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 2, 480, 1080), ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 3, 480, 1080), ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 4, 480, 1080), ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 5, 480, 1080), ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 6, 480, 840);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('40de0677-61fe-4012-ae79-b7be08ba2252', '5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Consulta clínica', 'veterinario', '{"cao","gato","outro"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('40de0677-61fe-4012-ae79-b7be08ba2252', 'mini', 30, 200), ('40de0677-61fe-4012-ae79-b7be08ba2252', 'pequeno', 30, 200), ('40de0677-61fe-4012-ae79-b7be08ba2252', 'medio', 30, 200), ('40de0677-61fe-4012-ae79-b7be08ba2252', 'grande', 30, 200), ('40de0677-61fe-4012-ae79-b7be08ba2252', 'gigante', 30, 200);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('b15799d0-9476-4e5c-addd-b708d3543f76', '5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Vacinação', 'veterinario', '{"cao","gato"}', true, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('b15799d0-9476-4e5c-addd-b708d3543f76', 'mini', 15, 100), ('b15799d0-9476-4e5c-addd-b708d3543f76', 'pequeno', 15, 100), ('b15799d0-9476-4e5c-addd-b708d3543f76', 'medio', 15, 100), ('b15799d0-9476-4e5c-addd-b708d3543f76', 'grande', 15, 100), ('b15799d0-9476-4e5c-addd-b708d3543f76', 'gigante', 15, 100);
+insert into public.servicos (id, prestador_id, nome, tipo, especies, preco_a_partir, ativo) values ('20fef784-5647-474d-a844-cea4054c8e5e', '5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Corte de unhas', 'petshop', '{"cao","gato"}', false, true);
+insert into public.servico_portes (servico_id, porte, duracao_min, preco) values ('20fef784-5647-474d-a844-cea4054c8e5e', 'mini', 15, 15), ('20fef784-5647-474d-a844-cea4054c8e5e', 'pequeno', 15, 15), ('20fef784-5647-474d-a844-cea4054c8e5e', 'medio', 15, 15), ('20fef784-5647-474d-a844-cea4054c8e5e', 'grande', 15, 15), ('20fef784-5647-474d-a844-cea4054c8e5e', 'gigante', 15, 15);
 
 -- avaliações de exemplo
 insert into public.avaliacoes (prestador_id, autor, estrelas, texto, criado_em) values
@@ -305,6 +394,107 @@ insert into public.avaliacoes (prestador_id, autor, estrelas, texto, criado_em) 
   ('1b12f9d0-a87a-46e5-ac1d-016c7480bb15', 'Rodrigo', 4, 'Gostei muito, preço justo.', '2026-10-02T03:00:00.000Z'),
   ('1b12f9d0-a87a-46e5-ac1d-016c7480bb15', 'Camila', 5, 'Equipe atenciosa, explicaram tudo.', '2026-09-12T03:00:00.000Z'),
   ('99a952ff-12ca-4d81-a5f1-0bdb6c160657', 'Marina', 4, 'Gostei muito, preço justo.', '2026-09-23T03:00:00.000Z'),
-  ('99a952ff-12ca-4d81-a5f1-0bdb6c160657', 'Rodrigo', 5, 'Melhor da região, sempre volto.', '2026-08-15T03:00:00.000Z');
+  ('99a952ff-12ca-4d81-a5f1-0bdb6c160657', 'Rodrigo', 5, 'Melhor da região, sempre volto.', '2026-08-15T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Gustavo', 4, 'Bom, mas atrasou uns 15 minutos.', '2026-09-05T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Marina', 4, 'Atendimento ótimo, meu cachorro voltou tranquilo.', '2026-10-10T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Rodrigo', 5, 'Bom, mas atrasou uns 15 minutos.', '2026-09-30T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Gustavo', 5, 'Equipe atenciosa, explicaram tudo.', '2026-09-25T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Marina', 3, 'Atendimento ótimo, meu cachorro voltou tranquilo.', '2026-09-10T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Larissa', 5, 'Bom, mas atrasou uns 15 minutos.', '2026-07-30T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Marina', 5, '', '2026-10-10T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Rodrigo', 5, 'Ambiente limpo e organizado.', '2026-10-13T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Marina', 5, 'Atendimento ótimo, meu cachorro voltou tranquilo.', '2026-09-02T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'André', 5, 'Melhor da região, sempre volto.', '2026-09-08T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Fernanda', 4, 'Bom, mas atrasou uns 15 minutos.', '2026-10-12T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Gustavo', 5, 'Bom, mas atrasou uns 15 minutos.', '2026-11-23T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Beatriz', 5, 'Bom, mas atrasou uns 15 minutos.', '2026-10-08T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Larissa', 5, 'Melhor da região, sempre volto.', '2026-08-04T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Paulo', 5, 'Ambiente limpo e organizado.', '2026-09-25T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Tatiane', 5, 'Equipe atenciosa, explicaram tudo.', '2026-09-01T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Ricardo', 5, 'Gostei muito, preço justo.', '2026-10-22T03:00:00.000Z'),
+  ('bff47848-a10e-4647-a60e-6ba3b55f1c94', 'Larissa', 5, 'Gostei muito, preço justo.', '2026-10-31T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Gustavo', 5, 'Bom, mas atrasou uns 15 minutos.', '2026-10-17T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'André', 4, 'Gostei muito, preço justo.', '2026-10-19T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Rodrigo', 5, 'Atendimento ótimo, meu cachorro voltou tranquilo.', '2026-10-20T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Ricardo', 3, 'Atendimento ótimo, meu cachorro voltou tranquilo.', '2026-08-31T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Tatiane', 5, 'Pontuais e cuidadosos. Recomendo.', '2026-10-23T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Ricardo', 4, 'Atendimento ótimo, meu cachorro voltou tranquilo.', '2026-08-29T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'André', 5, 'Pontuais e cuidadosos. Recomendo.', '2026-10-29T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'André', 4, 'Gostei muito, preço justo.', '2026-08-10T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Larissa', 5, '', '2026-09-24T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Marina', 5, 'Ambiente limpo e organizado.', '2026-09-05T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Tatiane', 5, 'Pontuais e cuidadosos. Recomendo.', '2026-09-28T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Gustavo', 4, 'Ambiente limpo e organizado.', '2026-08-25T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Fernanda', 5, 'Atendimento ótimo, meu cachorro voltou tranquilo.', '2026-10-31T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Fernanda', 5, 'Pontuais e cuidadosos. Recomendo.', '2026-07-28T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Rodrigo', 4, 'Melhor da região, sempre volto.', '2026-08-06T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'André', 5, 'Ambiente limpo e organizado.', '2026-10-26T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Beatriz', 5, 'Gostei muito, preço justo.', '2026-09-20T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'Rodrigo', 5, 'Gostei muito, preço justo.', '2026-08-26T03:00:00.000Z'),
+  ('3f2e0ded-cc3c-4211-a1f6-683a153783de', 'André', 5, 'Ambiente limpo e organizado.', '2026-10-23T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Tatiane', 4, 'Equipe atenciosa, explicaram tudo.', '2026-09-04T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Gustavo', 5, 'Equipe atenciosa, explicaram tudo.', '2026-09-12T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Rodrigo', 5, '', '2026-11-13T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Ricardo', 5, 'Equipe atenciosa, explicaram tudo.', '2026-10-18T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Gustavo', 5, 'Bom, mas atrasou uns 15 minutos.', '2026-08-31T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Tatiane', 4, 'Gostei muito, preço justo.', '2026-08-07T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Tatiane', 5, 'Melhor da região, sempre volto.', '2026-09-05T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Rodrigo', 5, 'Atendimento ótimo, meu cachorro voltou tranquilo.', '2026-10-17T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Ricardo', 5, 'Bom, mas atrasou uns 15 minutos.', '2026-08-23T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Tatiane', 5, '', '2026-09-23T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Paulo', 5, 'Melhor da região, sempre volto.', '2026-09-01T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Ricardo', 5, 'Bom, mas atrasou uns 15 minutos.', '2026-07-27T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Tatiane', 5, 'Equipe atenciosa, explicaram tudo.', '2026-10-30T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Tatiane', 5, 'Bom, mas atrasou uns 15 minutos.', '2026-10-11T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'André', 5, 'Pontuais e cuidadosos. Recomendo.', '2026-11-03T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Tatiane', 5, '', '2026-08-23T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Larissa', 4, 'Pontuais e cuidadosos. Recomendo.', '2026-10-02T03:00:00.000Z'),
+  ('effbc03e-da25-4444-a656-613aa34a56c2', 'Juliana', 4, 'Ambiente limpo e organizado.', '2026-10-28T03:00:00.000Z'),
+  ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'Ricardo', 5, '', '2026-10-07T03:00:00.000Z'),
+  ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'Ricardo', 5, 'Melhor da região, sempre volto.', '2026-10-11T03:00:00.000Z'),
+  ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'Marina', 3, 'Pontuais e cuidadosos. Recomendo.', '2026-08-30T03:00:00.000Z'),
+  ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'André', 4, 'Atendimento ótimo, meu cachorro voltou tranquilo.', '2026-10-07T03:00:00.000Z'),
+  ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'Camila', 5, '', '2026-08-19T03:00:00.000Z'),
+  ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'Paulo', 3, 'Bom, mas atrasou uns 15 minutos.', '2026-11-06T03:00:00.000Z'),
+  ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'Paulo', 4, 'Melhor da região, sempre volto.', '2026-09-21T03:00:00.000Z'),
+  ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'Fernanda', 5, 'Ambiente limpo e organizado.', '2026-08-24T03:00:00.000Z'),
+  ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'Ricardo', 5, 'Equipe atenciosa, explicaram tudo.', '2026-09-07T03:00:00.000Z'),
+  ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'Camila', 4, 'Melhor da região, sempre volto.', '2026-11-04T03:00:00.000Z'),
+  ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'Ricardo', 5, 'Equipe atenciosa, explicaram tudo.', '2026-08-25T03:00:00.000Z'),
+  ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'Fernanda', 5, 'Melhor da região, sempre volto.', '2026-08-23T03:00:00.000Z'),
+  ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'Marina', 5, 'Atendimento ótimo, meu cachorro voltou tranquilo.', '2026-10-24T03:00:00.000Z'),
+  ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'Ricardo', 4, 'Pontuais e cuidadosos. Recomendo.', '2026-09-24T03:00:00.000Z'),
+  ('6768db63-d4d0-4995-ad8e-e7edb247777e', 'Juliana', 5, 'Pontuais e cuidadosos. Recomendo.', '2026-08-06T03:00:00.000Z'),
+  ('0f72c0cd-f5c0-4045-a999-7bd4bb710241', 'Gustavo', 5, 'Bom, mas atrasou uns 15 minutos.', '2026-10-11T03:00:00.000Z'),
+  ('0f72c0cd-f5c0-4045-a999-7bd4bb710241', 'Ricardo', 4, '', '2026-11-19T03:00:00.000Z'),
+  ('0f72c0cd-f5c0-4045-a999-7bd4bb710241', 'Gustavo', 4, 'Ambiente limpo e organizado.', '2026-09-25T03:00:00.000Z'),
+  ('0f72c0cd-f5c0-4045-a999-7bd4bb710241', 'Beatriz', 5, 'Atendimento ótimo, meu cachorro voltou tranquilo.', '2026-10-07T03:00:00.000Z'),
+  ('0f72c0cd-f5c0-4045-a999-7bd4bb710241', 'Rodrigo', 4, 'Gostei muito, preço justo.', '2026-10-03T03:00:00.000Z'),
+  ('0f72c0cd-f5c0-4045-a999-7bd4bb710241', 'Tatiane', 5, 'Gostei muito, preço justo.', '2026-08-15T03:00:00.000Z'),
+  ('df9f37bc-cbac-410b-a318-b35fd1992582', 'André', 5, 'Equipe atenciosa, explicaram tudo.', '2026-11-17T03:00:00.000Z'),
+  ('df9f37bc-cbac-410b-a318-b35fd1992582', 'André', 5, 'Atendimento ótimo, meu cachorro voltou tranquilo.', '2026-09-20T03:00:00.000Z'),
+  ('df9f37bc-cbac-410b-a318-b35fd1992582', 'Camila', 5, 'Melhor da região, sempre volto.', '2026-11-21T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Beatriz', 4, 'Gostei muito, preço justo.', '2026-11-16T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'André', 3, 'Bom, mas atrasou uns 15 minutos.', '2026-08-26T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'André', 4, 'Bom, mas atrasou uns 15 minutos.', '2026-10-14T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Marina', 5, 'Pontuais e cuidadosos. Recomendo.', '2026-07-31T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Gustavo', 5, 'Pontuais e cuidadosos. Recomendo.', '2026-08-29T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Tatiane', 5, '', '2026-09-07T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Marina', 5, 'Gostei muito, preço justo.', '2026-10-22T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Gustavo', 3, 'Gostei muito, preço justo.', '2026-08-31T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Paulo', 5, 'Equipe atenciosa, explicaram tudo.', '2026-10-22T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Rodrigo', 5, '', '2026-09-12T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'André', 5, 'Gostei muito, preço justo.', '2026-10-19T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Camila', 5, 'Equipe atenciosa, explicaram tudo.', '2026-11-15T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Tatiane', 4, 'Equipe atenciosa, explicaram tudo.', '2026-09-09T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Fernanda', 5, 'Equipe atenciosa, explicaram tudo.', '2026-09-08T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Larissa', 4, 'Pontuais e cuidadosos. Recomendo.', '2026-08-24T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Fernanda', 5, '', '2026-08-11T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Marina', 3, 'Melhor da região, sempre volto.', '2026-09-24T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'André', 3, 'Ambiente limpo e organizado.', '2026-09-02T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Gustavo', 5, 'Ambiente limpo e organizado.', '2026-07-28T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Gustavo', 5, 'Ambiente limpo e organizado.', '2026-08-31T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Paulo', 5, '', '2026-08-01T03:00:00.000Z'),
+  ('5b6b96c0-d498-493c-a88b-0cdcedd6ca04', 'Gustavo', 3, 'Bom, mas atrasou uns 15 minutos.', '2026-09-01T03:00:00.000Z');
 
 commit;

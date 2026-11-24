@@ -61,10 +61,10 @@ export function About() {
         <p>O fluxo inteiro funciona: busca no mapa, filtros, perfil, horários calculados a partir do funcionamento, dos agendamentos, dos bloqueios e da duração do serviço, reserva temporária, confirmação, remarcação, cancelamento, avaliação e o painel do prestador.</p>
         <h3>O que está simulado</h3>
         <ul>
-          <li>Os 12 prestadores e a agenda deles são fictícios. Para entrar como um deles, use o telefone dele, por exemplo (11) 4191-0001.</li>
+          <li>Os 19 prestadores (12 em Alphaville e arredores, 7 no ABC) e a agenda deles são fictícios. Para entrar como um deles, use o telefone dele, de (11) 4191-0001 a (11) 4191-0019.</li>
           <li>Os dados ficam só neste aparelho. Tutor e prestador estão no mesmo celular para dar para testar os dois lados.</li>
           <li>O código de login e os lembretes de WhatsApp e e-mail aparecem na aba Mensagens em vez de serem enviados.</li>
-          <li>A busca de endereço conhece só alguns lugares de Alphaville e arredores.</li>
+          <li>A busca aceita CEP de Barueri, Santana de Parnaíba, Santo André, São Bernardo e São Caetano (leva ao centro da cidade ou de Alphaville) e o nome de alguns bairros. Rua e número ficam para a fase 2.</li>
         </ul>
         <h3>Suposições da especificação v0.1 <Sup /></h3>
         <ul>
@@ -74,7 +74,7 @@ export function About() {
           <li>Hotel e creche aparecem como "em breve". Atendimento a domicílio e leva e traz ficam para depois.</li>
           <li>Telefone e WhatsApp do prestador só aparecem depois de agendar.</li>
           <li>Cada agendamento guarda a origem e se é cliente novo, que é a base da comissão de 8%. A cobrança da comissão não está no MVP.</li>
-          <li>Raio padrão de 3 km, ajustável de 1 a 15 km. Cobertura do piloto em Alphaville, Tamboré e Aldeia da Serra.</li>
+          <li>Raio padrão de 3 km, ajustável de 1 a 15 km. Cobertura do piloto em Alphaville, Tamboré e Aldeia da Serra e no ABC (Santo André, São Bernardo e São Caetano).</li>
           <li>Reserva temporária de 5 minutos. Antecedência mínima de 2 h. Janela de 14 dias, até 30.</li>
           <li>Cancelamento sem custo até 2 h antes (o prestador pode mudar). Até 2 remarcações e 3 agendamentos futuros por prestador.</li>
           <li>Login por código no WhatsApp ou SMS. Pagamento no local.</li>

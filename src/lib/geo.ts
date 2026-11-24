@@ -15,7 +15,8 @@ export const kmLabel = (km: number) => `${km.toLocaleString('pt-BR', { minimumFr
 
 /**
  * Lugares conhecidos para a busca do protótipo. Coordenadas aproximadas.
- * No produto, a busca por endereço e CEP usa um serviço de geocodificação.
+ * No produto, a busca por endereço usa um serviço de geocodificação; o CEP já é
+ * resolvido pelas faixas de CEP_RANGES.
  */
 export const PLACES: { name: string; hint: string; lat: number; lng: number }[] = [
   { name: 'Centro Comercial Alphaville', hint: 'Barueri', lat: -23.4992, lng: -46.8486 },
@@ -28,8 +29,56 @@ export const PLACES: { name: string; hint: string; lat: number; lng: number }[] 
   { name: 'Tamboré 3', hint: 'Santana de Parnaíba', lat: -23.4930, lng: -46.8270 },
   { name: 'Aldeia da Serra', hint: 'Barueri / Santana de Parnaíba', lat: -23.4640, lng: -46.8790 },
   { name: 'Centro de Barueri', hint: 'Barueri', lat: -23.5110, lng: -46.8760 },
+  // ABC
+  { name: 'Centro de Santo André', hint: 'Santo André', lat: -23.6639, lng: -46.5383 },
+  { name: 'Jardim', hint: 'Santo André', lat: -23.6560, lng: -46.5300 },
+  { name: 'Vila Bastos', hint: 'Santo André', lat: -23.6545, lng: -46.5320 },
+  { name: 'Campestre', hint: 'Santo André', lat: -23.6440, lng: -46.5360 },
+  { name: 'Vila Assunção', hint: 'Santo André', lat: -23.6650, lng: -46.5230 },
+  { name: 'Centro de São Bernardo', hint: 'São Bernardo do Campo', lat: -23.6914, lng: -46.5646 },
+  { name: 'Rudge Ramos', hint: 'São Bernardo do Campo', lat: -23.6590, lng: -46.5700 },
+  { name: 'Nova Petrópolis', hint: 'São Bernardo do Campo', lat: -23.7000, lng: -46.5540 },
+  { name: 'Jardim do Mar', hint: 'São Bernardo do Campo', lat: -23.6950, lng: -46.5500 },
+  { name: 'Baeta Neves', hint: 'São Bernardo do Campo', lat: -23.6800, lng: -46.5560 },
+  { name: 'Centro de São Caetano', hint: 'São Caetano do Sul', lat: -23.6229, lng: -46.5548 },
+  { name: 'Santa Paula', hint: 'São Caetano do Sul', lat: -23.6180, lng: -46.5660 },
+  { name: 'Barcelona', hint: 'São Caetano do Sul', lat: -23.6300, lng: -46.5600 },
+  { name: 'Santo Antônio', hint: 'São Caetano do Sul', lat: -23.6250, lng: -46.5700 },
 ];
 
-/** Cobertura do piloto [Suposição] RN-04: Alphaville e entorno imediato. */
-export const PILOT_AREA_CENTER = ALPHAVILLE;
-export const PILOT_AREA_RADIUS_KM = 6;
+/** Áreas atendidas [Suposição] RN-04: Alphaville e entorno, e o ABC (Santo André, São Bernardo e São Caetano). */
+export const COVERAGE: { name: string; center: LatLng; radiusKm: number }[] = [
+  { name: 'Alphaville e arredores', center: ALPHAVILLE, radiusKm: 6 },
+  { name: 'ABC', center: { lat: -23.6650, lng: -46.5500 }, radiusKm: 9 },
+];
+export const inCoverage = (c: LatLng) => COVERAGE.some(a => distanceKm(c, a.center) <= a.radiusKm);
+
+/**
+ * Faixas de CEP dos Correios por cidade atendida. Sem serviço externo: o CEP
+ * leva ao centro da cidade (ou do trecho, quando há subfaixa conhecida).
+ * As subfaixas vêm antes da faixa da cidade. Coordenadas aproximadas.
+ */
+export const CEP_RANGES: { from: number; to: number; name: string; city: string; center: LatLng }[] = [
+  { from: 6453000, to: 6474999, name: 'Alphaville', city: 'Barueri', center: ALPHAVILLE },
+  { from: 6400001, to: 6499999, name: 'Barueri', city: 'Barueri', center: { lat: -23.5110, lng: -46.8760 } },
+  { from: 6540000, to: 6549999, name: 'Alphaville e Tamboré', city: 'Santana de Parnaíba', center: { lat: -23.4850, lng: -46.8450 } },
+  { from: 6500001, to: 6549999, name: 'Santana de Parnaíba', city: 'Santana de Parnaíba', center: { lat: -23.4440, lng: -46.9180 } },
+  { from: 9000001, to: 9299999, name: 'Santo André', city: 'Santo André', center: { lat: -23.6639, lng: -46.5383 } },
+  { from: 9500001, to: 9599999, name: 'São Caetano do Sul', city: 'São Caetano do Sul', center: { lat: -23.6229, lng: -46.5548 } },
+  { from: 9600001, to: 9899999, name: 'São Bernardo do Campo', city: 'São Bernardo do Campo', center: { lat: -23.6914, lng: -46.5646 } },
+];
+
+/** Texto parece CEP? (5 a 8 dígitos, com ou sem hífen) */
+export const looksLikeCep = (q: string) => /^\d{5}-?\d{0,3}$/.test(q.trim());
+export const fmtCep = (d: string) => (d.length > 5 ? `${d.slice(0, 5)}-${d.slice(5, 8)}` : d);
+
+/** CEP completo (8 dígitos) para a faixa conhecida, ou null se fora da área atendida. */
+export function cepLookup(q: string) {
+  const d = q.replace(/\D/g, '');
+  if (d.length !== 8) return null;
+  const n = Number(d);
+  return CEP_RANGES.find(r => n >= r.from && n <= r.to) ?? null;
+}
+
+/** Comparação sem acentos e sem caixa, para a busca por nome ("sao bernardo"). */
+export const norm = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
