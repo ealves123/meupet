@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { useStore, selectPet, myPets } from '../lib/store';
-import { ALPHAVILLE, DEFAULT_RADIUS_KM, PLACES, distanceKm, kmLabel, inCoverage, looksLikeCep, cepLookup, fmtCep, norm, type LatLng } from '../lib/geo';
+import { ALPHAVILLE, DEFAULT_RADIUS_KM, PLACES, distanceKm, kmLabel, inCoverage, looksLikeCep, cepSuggest, cepOf, fmtCep, norm, type LatLng } from '../lib/geo';
 import { PILOT_TYPES, SOON_TYPES, TYPE_EMOJI, TYPE_LABEL, brl } from '../lib/labels';
 import { daySlots, nextSlots } from '../lib/slots';
 import { addDays, startOfDay, whenLabel } from '../lib/dates';
@@ -84,11 +84,31 @@ export function Explore() {
   const pins: Pin[] = [...inside, ...outside].map(r => ({ id: r.p.id, lat: r.p.lat, lng: r.p.lng, emoji: r.p.emoji, color: r.p.color, label: r.p.name, active: r.km <= radius }));
   const sel = [...inside, ...outside].find(r => r.p.id === selected);
   const outOfPilot = !inCoverage(center);
+  // autocompletar: CEP (pelos primeiros números) ou nome de bairro/cidade
   const isCep = looksLikeCep(q);
-  const cepDigits = q.replace(/\D/g, '');
-  const cep = isCep ? cepLookup(q) : null;
-  const matches = !isCep && q.trim().length >= 2 ? PLACES.filter(p => norm(`${p.name} ${p.hint}`).includes(norm(q.trim()))).slice(0, 8) : [];
-  const goTo = (c: LatLng) => { setCenter(c); setPending(null); setQ(''); setSelected(null); };
+  const cepDigits = q.replace(/\D/g, '').slice(0, 8);
+  const options: { key: string; title: ReactNode; sub: string; center: LatLng }[] = isCep
+    ? cepSuggest(q).map(r => ({
+        key: `${r.from}`,
+        title: cepDigits.length === 8
+          ? <>CEP {fmtCep(cepDigits)} · {r.name}</>
+          : <>{r.name} <span className="cep-range"><Typed full={cepOf(r.from)} typed={cepDigits} /> a <Typed full={cepOf(r.to)} typed={cepDigits} /></span></>,
+        sub: cepDigits.length === 8 ? `${r.city} (SP) · mostra quem atende perto` : `${r.city} (SP)`,
+        center: r.center,
+      }))
+    : q.trim().length >= 2
+      ? PLACES.filter(p => norm(`${p.name} ${p.hint}`).includes(norm(q.trim()))).slice(0, 8)
+          .map(p => ({ key: p.name, title: <>{p.name}</>, sub: p.hint, center: p }))
+      : [];
+  const [hi, setHi] = useState(0);
+  const goTo = (c: LatLng) => { setCenter(c); setPending(null); setQ(''); setSelected(null); setHi(0); };
+  const onKey = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (!options.length) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); setHi(i => (i + 1) % options.length); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setHi(i => (i - 1 + options.length) % options.length); }
+    else if (e.key === 'Enter') { e.preventDefault(); goTo(options[Math.min(hi, options.length - 1)].center); }
+    else if (e.key === 'Escape') setQ('');
+  };
   const activeFilters = (minStars ? 1 : 0) + (maxPrice != null ? 1 : 0) + (radius !== DEFAULT_RADIUS_KM ? 1 : 0);
 
   const toggleType = (t: ServiceType) => setTypes(ts => (ts.includes(t) ? ts.filter(x => x !== t) : [...ts, t]));
@@ -106,25 +126,25 @@ export function Explore() {
       <div className="explore-top">
         <div className="search">
           <span aria-hidden>🔎</span>
-          <input value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && cep) goTo(cep.center); }} placeholder="CEP, bairro ou cidade" aria-label="Buscar por CEP, bairro ou cidade" />
+          <input value={q} onChange={e => { setQ(e.target.value); setHi(0); }} onKeyDown={onKey} placeholder="CEP, bairro ou cidade" aria-label="Buscar por CEP, bairro ou cidade"
+            role="combobox" aria-expanded={options.length > 0} aria-controls="busca-sugestoes" aria-autocomplete="list" autoComplete="off" />
           {q && <button className="icon-btn sm" aria-label="Limpar" onClick={() => setQ('')}>×</button>}
           <button className="icon-btn sm" aria-label="Usar minha localização" onClick={locate}>📍</button>
         </div>
-        {matches.length > 0 && (
-          <ul className="suggest" role="listbox">
-            {matches.map(m => (
-              <li key={m.name}><button onClick={() => goTo(m)}><b>{m.name}</b><small>{m.hint}</small></button></li>
+        {options.length > 0 && (
+          <ul className="suggest" role="listbox" id="busca-sugestoes">
+            {options.map((o, i) => (
+              <li key={o.key} role="option" aria-selected={i === hi}>
+                <button className={i === hi ? 'hi' : ''} onMouseEnter={() => setHi(i)} onClick={() => goTo(o.center)}>
+                  <b>{isCep && <span aria-hidden>📮 </span>}{o.title}</b><small>{o.sub}</small>
+                </button>
+              </li>
             ))}
+            {isCep && cepDigits.length < 8 && <li className="suggest-hint">Toque na cidade ou continue digitando o CEP</li>}
           </ul>
         )}
-        {cep && (
-          <ul className="suggest" role="listbox">
-            <li><button onClick={() => goTo(cep.center)}><b>CEP {fmtCep(cepDigits)} · {cep.name}</b><small>{cep.city} (SP) · mostra quem atende perto</small></button></li>
-          </ul>
-        )}
-        {isCep && cepDigits.length < 8 && <div className="suggest"><p className="muted pad">Digite os 8 números do CEP.</p></div>}
-        {isCep && cepDigits.length === 8 && !cep && <div className="suggest"><p className="muted pad">Esse CEP fica fora da área atendida. Por enquanto: Alphaville e arredores (Barueri e Santana de Parnaíba) e o ABC (Santo André, São Bernardo e São Caetano).</p></div>}
-        {!isCep && q.trim().length >= 2 && matches.length === 0 && <div className="suggest"><p className="muted pad">Nenhum lugar encontrado. Tente o CEP ou o nome do bairro ou da cidade.</p></div>}
+        {isCep && options.length === 0 && <div className="suggest"><p className="muted pad">Esse CEP fica fora da área atendida. Por enquanto: Alphaville e arredores (Barueri e Santana de Parnaíba) e o ABC (Santo André, São Bernardo e São Caetano).</p></div>}
+        {!isCep && q.trim().length >= 2 && options.length === 0 && <div className="suggest"><p className="muted pad">Nenhum lugar encontrado. Tente o CEP ou o nome do bairro ou da cidade.</p></div>}
         <div className="chips" role="group" aria-label="Tipo de serviço">
           {PILOT_TYPES.map(t => (
             <button key={t} className={`chip${types.includes(t) ? ' on' : ''}`} aria-pressed={types.includes(t)} onClick={() => toggleType(t)}>{TYPE_EMOJI[t]} {TYPE_LABEL[t]}</button>
@@ -236,4 +256,11 @@ function ProviderCard({ r, floating }: { r: Row; floating?: boolean }) {
       </div>
     </button>
   );
+}
+
+/** Mostra em negrito a parte do CEP que a pessoa já digitou. */
+function Typed({ full, typed }: { full: string; typed: string }) {
+  let n = 0, cut = 0;
+  for (; cut < full.length && n < typed.length; cut++) if (/\d/.test(full[cut])) { if (full[cut] !== typed[n]) break; n++; }
+  return <><b className="typed">{full.slice(0, cut)}</b>{full.slice(cut)}</>;
 }

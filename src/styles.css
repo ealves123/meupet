@@ -349,3 +349,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .card.menu button > span:nth-child(2) { flex: 1; display: grid; }
 .card.menu small { color: var(--muted); font-weight: 400; }
 .card.menu b { color: var(--muted); font-size: 1.3rem; }
+
+/* autocompletar da busca */
+.suggest { max-height: 300px; overflow-y: auto; }
+.suggest button.hi { background: var(--soft); }
+.suggest button b { font-weight: 600; }
+.cep-range { display: block; font-weight: 400; font-variant-numeric: tabular-nums; color: var(--muted); font-size: .85rem; }
+.cep-range .typed { color: var(--brand); font-weight: 700; }
+.suggest-hint { padding: 6px 10px 4px; font-size: .78rem; color: var(--muted); }

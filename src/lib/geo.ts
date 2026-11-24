@@ -68,9 +68,24 @@ export const CEP_RANGES: { from: number; to: number; name: string; city: string;
   { from: 9600001, to: 9899999, name: 'São Bernardo do Campo', city: 'São Bernardo do Campo', center: { lat: -23.6914, lng: -46.5646 } },
 ];
 
-/** Texto parece CEP? (5 a 8 dígitos, com ou sem hífen) */
-export const looksLikeCep = (q: string) => /^\d{5}-?\d{0,3}$/.test(q.trim());
+/** Texto parece CEP? (1 a 8 dígitos, com ou sem hífen depois do quinto) */
+export const looksLikeCep = (q: string) => /^\d{1,5}(-\d{0,3})?$/.test(q.trim());
 export const fmtCep = (d: string) => (d.length > 5 ? `${d.slice(0, 5)}-${d.slice(5, 8)}` : d);
+export const cepOf = (n: number) => fmtCep(String(n).padStart(8, '0'));
+
+/**
+ * Autocompletar do CEP: faixas que ainda combinam com os primeiros números digitados.
+ * "09" mostra Santo André, São Caetano e São Bernardo; "096" só São Bernardo.
+ * Com o CEP completo, devolve só a faixa exata (subfaixa primeiro).
+ */
+export function cepSuggest(q: string) {
+  const d = q.replace(/\D/g, '').slice(0, 8);
+  if (!d) return [];
+  if (d.length === 8) { const r = cepLookup(d); return r ? [r] : []; }
+  const scale = 10 ** (8 - d.length);
+  const lo = Number(d) * scale, hi = lo + scale - 1;
+  return CEP_RANGES.filter(r => r.from <= hi && r.to >= lo);
+}
 
 /** CEP completo (8 dígitos) para a faixa conhecida, ou null se fora da área atendida. */
 export function cepLookup(q: string) {
